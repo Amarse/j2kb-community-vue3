@@ -1,8 +1,50 @@
 <template>
-    board view
-    <router-view />
+  <TabMenu :model="items" class="w-full"> </TabMenu>
+
+  <router-view />
 </template>
 <script lang="ts" setup>
+import TabMenu from "primevue/tabmenu";
+
+const items = [
+  {
+    label: "전체",
+    to: "/home/board/all",
+  },
+  {
+    label: "HOT",
+    to: "/home/board/hot",
+  },
+  {
+    label: "스터디/모임",
+    to: "/home/board/study",
+  },
+  {
+    label: "개발 질문",
+    to: "/home/board/question",
+  },
+];
 </script>
 <style lang="scss" scoped>
+:deep(.p-tabmenuitem) {
+  flex-grow: 1;
+
+  .p-menuitem-link {
+    color: $gray800 !important;
+    font-weight: 400 !important;
+    .p-menuitem-text {
+      width: 100%;
+      display: inline-block;
+      text-align: center;
+    }
+  }
+}
+
+:deep(.p-tabmenuitem.p-highlight) {
+  .p-menuitem-link {
+    color: $blue !important;
+    border-color: $blue !important;
+    font-weight: 700 !important;
+  }
+}
 </style>

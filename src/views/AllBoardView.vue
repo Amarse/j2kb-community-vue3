@@ -1,5 +1,5 @@
 <template>
-    general board
+    all board
 </template>
 <script lang="ts" setup>
 </script>

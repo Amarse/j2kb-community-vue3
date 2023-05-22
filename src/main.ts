@@ -10,6 +10,8 @@ import "./assets/styles/_reset.css";
 import "primevue/resources/themes/lara-light-indigo/theme.css";     
 //core
 import "primevue/resources/primevue.min.css";
+//icon
+import 'primeicons/primeicons.css';
 
 //flex
 import "primeflex/primeflex.css";

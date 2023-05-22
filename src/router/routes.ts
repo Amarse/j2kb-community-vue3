@@ -2,8 +2,10 @@ import LoginView from "@/views/LoginView.vue";
 import SignUpView from "@/views/SignUpView.vue";
 import HomeView from "@/views/HomeView.vue";
 import BoardView from "@/views/BoardView.vue";
-import GeneralBoardView from "@/views/GeneralBoardView.vue";
+import AllBoardView from "@/views/AllBoardView.vue";
 import HotBoardView from "@/views/HotBoardView.vue";
+import StudyBoardView from "@/views/StudyBoardView.vue";
+import QuestionBoardView from "@/views/QuestionBoardView.vue";
 import PostView from "@/views/PostView.vue";
 import PostWriteView from "@/views/PostWriteView.vue";
 import ViewMyPostView from "@/views/ViewMyPostView.vue";
@@ -35,17 +37,27 @@ const routes = [
         path: "board",
         name: "board",
         component: BoardView,
-        redirect: "/home/board/general",
+        redirect: "/home/board/all",
         children: [
           {
-            path: "general",
-            name: "board-general",
-            component: GeneralBoardView,
+            path: "all",
+            name: "board-all",
+            component: AllBoardView,
           },
           {
             path: "hot",
             name: "board-hot",
             component: HotBoardView,
+          },
+          {
+            path: "study",
+            name: "board-study",
+            component: StudyBoardView,
+          },
+          {
+            path: "question",
+            name: "board-question",
+            component: QuestionBoardView,
           },
         ],
       },
