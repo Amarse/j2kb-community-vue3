@@ -2,7 +2,13 @@
   <TemplateLoginForm>
     <p class="flex justify-content-center align-items-center gap-2 m-3">
       <span>아직 회원이 아니신가요?</span>
-      <Button label="회원가입" severity="secondary" text class="p-0 h-2rem" />
+      <Button
+        label="회원가입"
+        severity="secondary"
+        text
+        class="p-0 h-2rem"
+        @click="goToSignUpView"
+      />
     </p>
     <div class="flex flex-column gap-2">
       <label for="email">Email</label>
@@ -24,8 +30,8 @@
     </div>
     <div class="flex justify-content-between align-items-center">
       <p class="flex gap-2 align-items-center">
-        <Checkbox v-model="rememberEmail" inputId="chkbox1" binary />
-        <label for="chkbox1">이메일 저장</label>
+        <Checkbox v-model="rememberEmail" inputId="chkemail" binary />
+        <label for="chkemail">이메일 저장</label>
       </p>
       <p class="flex align-items-center">
         <Button
@@ -33,10 +39,11 @@
           severity="secondary"
           text
           class="p-0 h-2rem"
+          @click="goToFindPasswordView"
         />
       </p>
     </div>
-    <Button label="로그인" class="w-full" size="small" />
+    <Button label="로그인" class="w-full" size="small" @click="login" />
   </TemplateLoginForm>
 </template>
 
@@ -47,6 +54,7 @@ import InputText from "primevue/inputtext";
 import Button from "primevue/button";
 import Checkbox from "primevue/checkbox";
 import { ref } from "vue";
+import router from "@/router";
 
 const user = ref<Pick<TUser, "email" | "password">>({
   email: "",
@@ -54,6 +62,21 @@ const user = ref<Pick<TUser, "email" | "password">>({
 });
 
 const rememberEmail = ref<boolean>(false);
+
+const login = () => {
+  // todo something
+  // 1. validation check
+  // 2. login -> move to board view
+};
+
+const goToSignUpView = () => {
+  // todo something
+  router.push("/sign-up");
+};
+
+const goToFindPasswordView = () => {
+  // todo something
+};
 </script>
 
 <style lang="scss" scoped></style>
