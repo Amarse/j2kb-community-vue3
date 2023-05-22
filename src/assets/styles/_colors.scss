@@ -1,0 +1,47 @@
+//color
+$blue: #009cde;
+$pink: #f3628d;
+$red: #f25555;
+$black: #454b57;
+$gray900: #6f7479;
+$gray800: #93a0ba;
+$gray500: #cfd9ed;
+$gray200: #dbe3f4;
+$gray100: #e9e9e9;
+$gray50: #f5f8fd;
+
+//button
+$blue-hover: #54bfec;
+$blue-selected: #54bfec;
+
+.font-blue {
+  color:$blue;
+}
+
+.font-pink {
+  color: $pink;
+}
+.font-red {
+  color: $red;
+}
+.font-black {
+  color: $black;
+}
+.font-gray-900 {
+  color: $gray900;
+}
+.font-gray-800 {
+  color: $gray800;
+}
+.font-gray-500 {
+  color: $gray500;
+}
+.font-gray-200 {
+  color: $gray200;
+}
+.font-gray-100 {
+  color: $gray100;
+}
+.font-gray-50 {
+  color: $gray50;
+}
