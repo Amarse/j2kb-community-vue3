@@ -67,6 +67,8 @@ const login = () => {
   // todo something
   // 1. validation check
   // 2. login -> move to board view
+  // #test
+  router.push("/home");
 };
 
 const goToSignUpView = () => {
