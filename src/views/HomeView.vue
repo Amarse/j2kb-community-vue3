@@ -126,8 +126,8 @@ nickname.value = "담담";
     width: 100%;
     height: 100%;
 
-    background-color: #9A9A9A;
-    opacity: 0.3;
+    background-color: $gray900;
+    opacity: calc(1 - 0.76);
 
     z-index: 999;
   }

@@ -1,7 +1,8 @@
 <template>
   <TabMenu :model="items" class="w-full"> </TabMenu>
-
-  <router-view />
+  <section class="board-list-wrapper">
+    <router-view />
+  </section>
 </template>
 <script lang="ts" setup>
 import TabMenu from "primevue/tabmenu";
@@ -46,5 +47,10 @@ const items = [
     border-color: $blue !important;
     font-weight: 700 !important;
   }
+}
+
+.board-list-wrapper {
+    height: calc(100vh - rem(104px) - rem(58px));
+    overflow-y: auto;
 }
 </style>
