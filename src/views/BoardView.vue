@@ -13,10 +13,6 @@ const items = [
     to: "/home/board/all",
   },
   {
-    label: "HOT",
-    to: "/home/board/hot",
-  },
-  {
     label: "스터디/모임",
     to: "/home/board/study",
   },
@@ -43,8 +39,8 @@ const items = [
 
 :deep(.p-tabmenuitem.p-highlight) {
   .p-menuitem-link {
-    color: $blue !important;
-    border-color: $blue !important;
+    color: $black !important;
+    border-color: $black !important;
     font-weight: 700 !important;
   }
 }
