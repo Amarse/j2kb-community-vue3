@@ -1,51 +1,36 @@
 <template>
-  <BoardCard
-    v-for="post in posts"
-    :name="post.name"
-    :date="post.date"
-    :title="post.title"
-    :content="post.content"
-    :comment-count="post.commentCount"
-  ></BoardCard>
+  <PostCard v-for="post in postList" :post="post"></PostCard>
 </template>
 <script lang="ts" setup>
-import BoardCard from "@/components/board-card/BoardCard.vue";
-
+import { TPost } from "@/assets/models/TPost";
+import PostCard from "@/components/post-card/PostCard.vue";
 // #test
-const posts = [
+const postList: TPost[] = [
   {
-    name: "박소담",
-    date: "2023-05-22 13:18",
-    title: `대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
-      만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
-      만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
-      만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
-      만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
-      만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.`,
+    post_id: "test1",
+    writer: "박소담",
     content: `대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
       만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
       만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
       만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
       만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
       만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.`,
-    commentCount: 10,
+    likes: 0,
+    created_at: "2023-05-22 13:18",
+    reply_ids: [],
   },
   {
-    name: "박소담",
-    date: "2023-05-22 13:18",
-    title: `대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
-      만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
-      만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
-      만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
-      만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
-      만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.`,
+    post_id: "test2",
+    writer: "박소담",
     content: `대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
       만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
       만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
       만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
       만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
       만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.`,
-    commentCount: 10,
+    likes: 0,
+    created_at: "2023-05-22 13:18",
+    reply_ids: [],
   },
 ];
 </script>
