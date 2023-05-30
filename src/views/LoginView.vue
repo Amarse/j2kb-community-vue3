@@ -68,7 +68,7 @@ const login = () => {
   // 1. validation check
   // 2. login -> move to board view
   // #test
-  router.push("/home");
+  router.push("/main");
 };
 
 const goToSignUpView = () => {

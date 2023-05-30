@@ -1,15 +1,12 @@
 import LoginView from "@/views/LoginView.vue";
 import SignUpView from "@/views/SignUpView.vue";
-import HomeView from "@/views/HomeView.vue";
+import MainView from "@/views/MainView.vue";
 import BoardView from "@/views/BoardView.vue";
 import AllBoardView from "@/views/AllBoardView.vue";
 import HotBoardView from "@/views/HotBoardView.vue";
 import StudyBoardView from "@/views/StudyBoardView.vue";
 import QuestionBoardView from "@/views/QuestionBoardView.vue";
 import PostView from "@/views/PostView.vue";
-import PostWriteView from "@/views/PostWriteView.vue";
-import ViewMyPostView from "@/views/ViewMyPostView.vue";
-import ViewMyCommentView from "@/views/ViewMyCommentView.vue";
 import UpdateProfileView from "@/views/UpdateProfileView.vue";
 
 const routes = [
@@ -28,26 +25,21 @@ const routes = [
     component: SignUpView,
   },
   {
-    path: "/home",
-    name: "home",
-    component: HomeView,
-    redirect: "/home/board",
+    path: "/main",
+    name: "main",
+    redirect: "/main/board",
+    component: MainView,
     children: [
       {
         path: "board",
         name: "board",
+        redirect: "/main/board/all",
         component: BoardView,
-        redirect: "/home/board/all",
         children: [
           {
             path: "all",
             name: "board-all",
             component: AllBoardView,
-          },
-          {
-            path: "hot",
-            name: "board-hot",
-            component: HotBoardView,
           },
           {
             path: "study",
@@ -62,33 +54,9 @@ const routes = [
         ],
       },
       {
-        path: "post",
-        name: "post",
-        component: PostView,
-        redirect: "/home/post/write",
-        children: [
-          {
-            path: "write",
-            name: "post-write",
-            component: PostWriteView,
-          },
-        ],
-      },
-      {
-        path: "view-my",
-        name: "view-my",
-        children: [
-          {
-            path: "post",
-            name: "view-my-post",
-            component: ViewMyPostView,
-          },
-          {
-            path: "comment",
-            name: "view-my-comment",
-            component: ViewMyCommentView,
-          },
-        ],
+        path: "hot",
+        name: "hot",
+        component: HotBoardView,
       },
       {
         path: "update-profile",
@@ -96,6 +64,11 @@ const routes = [
         component: UpdateProfileView,
       },
     ],
+  },
+  {
+    path: "/post",
+    name: "post",
+    component: PostView,
   },
 ];
 

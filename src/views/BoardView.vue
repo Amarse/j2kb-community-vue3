@@ -10,15 +10,15 @@ import TabMenu from "primevue/tabmenu";
 const items = [
   {
     label: "전체",
-    to: "/home/board/all",
+    to: "/main/board/all",
   },
   {
     label: "스터디/모임",
-    to: "/home/board/study",
+    to: "/main/board/study",
   },
   {
     label: "개발 질문",
-    to: "/home/board/question",
+    to: "/main/board/question",
   },
 ];
 </script>
@@ -46,7 +46,7 @@ const items = [
 }
 
 .board-list-wrapper {
-    height: calc(100vh - rem(104px) - rem(58px));
+    height: calc(100% - rem(104px) - rem(58px));
     overflow-y: auto;
 }
 </style>
