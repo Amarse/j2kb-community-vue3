@@ -16,5 +16,24 @@ dayjs.locale("ko");
   max-width: rem(768px);
   margin: 0 auto;
   border: rem(1px) solid $gray500;
+  background: white;
+}
+
+header {
+  height: rem($header-height) !important;
+  padding: 2rem !important;
+  box-sizing: border-box !important;
+  background: white;
+  font-size: 2.5rem !important;
+
+  button {
+    border: none;
+    background: white;
+
+    .pi {
+      color: $black;
+      font-size: rem(24px);
+    }
+  }
 }
 </style>
