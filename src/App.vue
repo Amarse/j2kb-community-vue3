@@ -19,6 +19,10 @@ dayjs.locale("ko");
   background: white;
 }
 
+.wrapper:has(.post-detail) {
+  height: 100% !important;
+}
+
 header {
   height: rem($header-height) !important;
   padding: 2rem !important;

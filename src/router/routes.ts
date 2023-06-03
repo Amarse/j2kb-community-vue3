@@ -7,6 +7,7 @@ import HotBoardView from "@/views/HotBoardView.vue";
 import StudyBoardView from "@/views/StudyBoardView.vue";
 import QuestionBoardView from "@/views/QuestionBoardView.vue";
 import PostView from "@/views/PostView.vue";
+import PostDetailView from "@/views/PostDetailView.vue";
 import UpdateProfileView from "@/views/UpdateProfileView.vue";
 
 const routes = [
@@ -69,6 +70,11 @@ const routes = [
     path: "/post",
     name: "post",
     component: PostView,
+  },
+  {
+    path: "/detail/:id",
+    name: "post-detail",
+    component: PostDetailView,
   },
 ];
 
