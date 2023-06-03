@@ -3,7 +3,7 @@
 </template>
 <script lang="ts" setup>
 import { TPost } from "@/assets/models/TPost";
-import PostCard from "@/components/post-card/PostCard.vue";
+import PostCard from "@/components/post/PostCard.vue";
 // #test
 const postList: TPost[] = [
   {
@@ -15,6 +15,7 @@ const postList: TPost[] = [
       만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
       만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
       만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.`,
+    views: 0,
     likes: 0,
     created_at: "2023-05-22 13:18",
     reply_ids: [],
@@ -28,6 +29,7 @@ const postList: TPost[] = [
       만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
       만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
       만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.`,
+    views: 0,
     likes: 0,
     created_at: "2023-05-22 13:18",
     reply_ids: [],

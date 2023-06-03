@@ -29,6 +29,7 @@ const post: TPost = {
   post_id: "",
   writer: "",
   content: "",
+  views:0,
   likes: 0,
   reply_ids: [],
   created_at: "string",
