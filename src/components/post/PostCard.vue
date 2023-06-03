@@ -1,5 +1,5 @@
 <template>
-  <article class="board-card-wrapper">
+  <article class="board-card-wrapper" @click.prevent="goToDetailView(post.post_id)">
     <div class="flex mb-4 gap-3 align-items-center">
       <img
         class="profile-image border-circle"
@@ -13,7 +13,7 @@
     <p class="mb-3 content text-lg font-black">
       {{ post.content }}
     </p>
-    <p class="flex gap-7 align-items-center font-gray-900">
+    <p class="flex gap-5 align-items-center font-gray-900">
       <span class="text-base">
         <i class="pi pi-comment"></i>
         {{ post.reply_ids.length }}
@@ -27,6 +27,7 @@
 </template>
 <script lang="ts" setup>
 import { TPost } from "@/assets/models/TPost";
+import router from "@/router";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 
@@ -36,17 +37,17 @@ const props = defineProps<{
   post: TPost;
 }>();
 
+// variables
 const date = dayjs(props.post.created_at).fromNow();
+
+// methods
+const goToDetailView = (id: string) => {
+  router.push(`/detail/${id}`);
+}
 </script>
 <style lang="scss" scoped>
 .board-card-wrapper {
-  padding: rem(40px);
-
-  .profile-image {
-    width: rem(60px);
-    height: rem(60px);
-    object-fit: cover;
-  }
+  padding: rem($card-padding);
 
   .title {
     @include text-truncate(1, 1.5);
