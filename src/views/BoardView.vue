@@ -1,4 +1,13 @@
 <template>
+  <header>
+    <p class="flex justify-content-between align-items-center font-black">
+      <span class="text-5xl">대나무숲</span>
+      <button aria-label="hamburger" class="hamburger-button">
+        <i class="pi pi-bars" />
+      </button>
+    </p>
+  </header>
+  <hr class="m-0" />
   <TabMenu :model="items" class="w-full"> </TabMenu>
   <section class="board-list-wrapper">
     <router-view />
@@ -23,6 +32,7 @@ const items = [
 ];
 </script>
 <style lang="scss" scoped>
+
 :deep(.p-tabmenuitem) {
   flex-grow: 1;
 
@@ -46,7 +56,7 @@ const items = [
 }
 
 .board-list-wrapper {
-    height: calc(100% - rem(104px) - rem(58px));
-    overflow-y: auto;
+  height: calc(100% - rem(104px) - rem(58px));
+  overflow-y: auto;
 }
 </style>

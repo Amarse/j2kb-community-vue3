@@ -40,4 +40,11 @@ header {
     }
   }
 }
+
+
+hr {
+  height: rem(1px);
+  border: 0;
+  background: $gray100;
+}
 </style>

@@ -1,13 +1,6 @@
 <template>
   <div class="w-full h-full">
     <main class="main">
-      <p class="flex justify-content-between align-items-center p-5 font-black">
-        <span class="text-5xl">대나무숲</span>
-        <button aria-label="hamburger" class="hamburger-button">
-          <i class="pi pi-bars" />
-        </button>
-      </p>
-      <hr class="m-0" />
       <router-view />
     </main>
     <footer class="footer">
@@ -39,7 +32,7 @@ const tabMenu = [
   {
     icon: "pi pi-search",
     label: "search",
-    link: "/search",
+    link: "/main/search",
   },
   {
     icon: "pi pi-plus-circle",
@@ -73,12 +66,6 @@ const isActive = (index: number) => {
 };
 </script>
 <style lang="scss" scoped>
-hr {
-  height: rem(1px);
-  border: 0;
-  background: $gray100;
-}
-
 button {
   border: none;
   background: white;
