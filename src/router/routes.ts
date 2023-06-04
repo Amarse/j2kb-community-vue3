@@ -8,6 +8,7 @@ import StudyBoardView from "@/views/StudyBoardView.vue";
 import QuestionBoardView from "@/views/QuestionBoardView.vue";
 import PostView from "@/views/PostView.vue";
 import PostDetailView from "@/views/PostDetailView.vue";
+import SearchView from "@/views/SearchView.vue";
 import UpdateProfileView from "@/views/UpdateProfileView.vue";
 
 const routes = [
@@ -53,6 +54,11 @@ const routes = [
             component: QuestionBoardView,
           },
         ],
+      },
+      {
+        path: "search",
+        name: "search",
+        component: SearchView,
       },
       {
         path: "hot",
