@@ -36,7 +36,7 @@
           <button @click="commentOrderBy('asc')" :class="orderBy === 'asc' ? 'selected' : ''">등록순</button>
         </div>
       </p>
-      <PostReply v-for="reply in replyList" :reply="reply" />
+      <PostReply v-for="reply, index in replyList" :reply="reply" :key="index"/>
     </section>
   </main>
 </div>
