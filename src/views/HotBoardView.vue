@@ -1,15 +1,14 @@
 <template>
   <header>
-    <p class="flex justify-content-between align-items-center font-black">
-      <span class="text-5xl">대나무숲</span>
+    <p class="flex justify-content-between align-items-center black">
+      <span class="text-3xl font-medium">대나무숲</span>
       <button aria-label="hamburger" class="hamburger-button">
         <i class="pi pi-bars" />
       </button>
     </p>
   </header>
-  <hr class="m-0" />
 
-  <PostCard v-for="post in postList" :post="post"></PostCard>
+  <PostCard v-for="post, index in postList" :post="post" :key="index"></PostCard>
 </template>
 <script lang="ts" setup>
 import { TPost } from "@/assets/models/TPost";
