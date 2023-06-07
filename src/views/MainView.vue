@@ -7,9 +7,10 @@
       <button
         v-for="(tab, index) in tabMenu"
         :aria-label="tab.label"
-        class="flex-grow-1"
+        class="footer-button"
         @click="changeTab(tab.link, index)"
-        :class="['flex-grow-1', isActive(index)]"
+        :class="['footer-button', isActive(index)]"
+        :key="index"
       >
         <i :class="tab.icon" />
       </button>
@@ -72,7 +73,7 @@ button {
 
   :deep(.pi) {
     color: $black;
-    font-size: rem(44px);
+    font-size: rem(24px);
   }
 }
 
@@ -89,11 +90,14 @@ button.hamburger-button {
 
 .footer {
   width: 100%;
-  height: rem($header-height);
+  height: rem($footer-height);
   display: flex;
+  justify-content: center;
   border-top: rem(1px) solid $gray100;
   box-sizing: border-box;
-
+  .footer-button {
+    padding: rem(28px);
+  }
   .active {
     :deep(.pi) {
       color: $blue;

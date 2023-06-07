@@ -57,7 +57,7 @@ const goToDetailView = (id: string) => {
   }
 
   &:nth-child(2n) {
-    border-top: rem(1px) solid #aaa;
+    // border-top: rem(1px) solid #aaa;
     border-bottom: rem(1px) solid #aaa;
   }
 }
