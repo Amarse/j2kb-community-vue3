@@ -1,5 +1,6 @@
 export type TPost = {
   post_id: string;
+  category: string;
   writer: string;
   content: string;
   views: number;
