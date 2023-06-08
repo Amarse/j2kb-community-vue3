@@ -47,12 +47,4 @@ hr {
   border: 0;
   background: $gray100;
 }
-
-.green {
-  color: $green;
-}
-
-.orange {
-  color: $orange;
-}
 </style>

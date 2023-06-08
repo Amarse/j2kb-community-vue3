@@ -1,10 +1,12 @@
 //color
 $blue: #009cde;
 $pink: #f3628d;
+$babyPink: #ffc9c9;
+$purple: #dbc9ff;
 $red: #f25555;
 $green: #307119;
-$orange: #DD5508;
-$lemon: #F9F7F3;
+$orange: #dd5508;
+$lemon: #f9f7f3;
 $black: #0e0e0f;
 $gray900: #454b57;
 $gray800: #6f7479;
@@ -55,4 +57,26 @@ $blue-selected: #54bfec;
 }
 .font-gray-50 {
   color: $gray50;
+}
+.green {
+  color: $green;
+}
+
+.orange {
+  color: $orange;
+}
+.baby-pink-badge {
+  background: $babyPink;
+  width: fit-content;
+  padding: rem(2px) rem(8px);
+  box-sizing: border-box;
+  border-radius: rem(8px);
+}
+
+.purple-badge {
+  background: $purple;
+  width: fit-content;
+  padding: rem(2px) rem(8px);
+  box-sizing: border-box;
+  border-radius: rem(8px);
 }

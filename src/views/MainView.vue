@@ -85,6 +85,7 @@ button.hamburger-button {
 
 .main {
   width: 100%;
+  position: relative;
   height: calc(100% - rem($header-height));
 }
 
