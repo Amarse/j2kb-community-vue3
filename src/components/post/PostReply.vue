@@ -1,36 +1,42 @@
 <template>
   <div :class="['reply-wrapper', hasDepth]">
-    <img
-      class="profile-image border-circle mr-3"
-      src="https://plus.unsplash.com/premium_photo-1666264200739-caa822df28d3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw0fHx8ZW58MHx8fHx8&auto=format&fit=crop&w=800&q=60"
-    />
-    <div :class="['flex', 'flex-column', 'gap-2']">
-      <p class="flex gap-2 align-items-center">
-        <span class="text-xl font-bold font-gray-800">{{ reply.writer }}</span>
-        <span class="text-base font-gray-900">{{ reply.created_at }}</span>
+    <div class="flex gap-2 ">
+      <p class="pr-2">
+        <img
+          class="reply-image border-circle mr-2"
+          src="https://plus.unsplash.com/premium_photo-1666264200739-caa822df28d3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw0fHx8ZW58MHx8fHx8&auto=format&fit=crop&w=800&q=60"
+        />
       </p>
-      <p class="content">
-        {{ reply.content }}
-      </p>
+      <div class="flex flex-column  gap-2">
+        <p class="flex align-items-center justify-content-center">
+          <span class="text-base font-medium font-gray-900 mr-2">{{
+            reply.writer
+          }}</span>
+          <span class="text-sm font-gray-800">{{ reply.created_at }}</span>
+        </p>
+        <p class="content">
+          {{ reply.content }}
+        </p>
+      </div>
     </div>
     <PostOptions @option="selectedCommentOption" class="option" />
   </div>
 </template>
 <script lang="ts" setup>
-import { computed } from "vue";
-import { TPostReply } from "@/assets/models/TPost";
-import PostOptions from "./PostOptions.vue";
+import { computed } from 'vue';
+import { TPostReply } from '@/assets/models/TPost';
+import PostOptions from './PostOptions.vue';
 
 const props = defineProps<{
   reply: TPostReply;
 }>();
 
 const hasDepth = computed(() => {
-  return props.reply.depth === 0 ? "original" : "depth";
+  return props.reply.depth === 0 ? 'original' : 'depth';
 });
 // methods
 const selectedCommentOption = (option: string) => {
-  if (option === "modify") {
+  if (option === 'modify') {
     // 수정
     // todo something
   } else {

@@ -1,25 +1,25 @@
 <template>
   <div>
     <button class="ellipsis-button" @click="showOptions">
-      <i class="pi pi-ellipsis-v text-2xl font-gray-600" />
+      <i class="pi pi-ellipsis-v text-xl font-gray-600" />
     </button>
     <ul v-show="isShow" class="options-wrapper">
       <li class="option" @click="clickOption('modify')">
-        <i class="pi pi-pencil mr-4 font-gray-600" />
-        <span>수정</span>
+        <i class="pi pi-pencil mr-4 font-gray-600 text-base"/>
+        <span class="text-base">수정</span>
       </li>
       <li class="option" @click="clickOption('delete')">
-        <i class="pi pi-trash mr-4 font-gray-600" />
-        <span>삭제</span>
+        <i class="pi pi-trash mr-4 font-gray-600 text-base" />
+        <span class="text-base">삭제</span>
       </li>
     </ul>
   </div>
 </template>
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref } from 'vue';
 
 const emit = defineEmits<{
-  (e: "option", optionName: string): void;
+  (e: 'option', optionName: string): void;
 }>();
 
 // variables
@@ -31,7 +31,7 @@ const showOptions = () => {
 };
 
 const clickOption = (option: string) => {
-  emit("option", option);
+  emit('option', option);
 };
 </script>
 <style lang="scss" scoped>
@@ -45,7 +45,6 @@ const clickOption = (option: string) => {
   top: rem(37px);
   right: rem(10px);
   width: rem(140px);
-  height: rem(98px);
 
   border: rem(1px) solid $gray600;
   box-sizing: border-box;
