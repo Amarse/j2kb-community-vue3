@@ -5,9 +5,9 @@
 </template>
 
 <script lang="ts" setup>
-import dayjs from "dayjs";
-import "dayjs/locale/ko";
-dayjs.locale("ko");
+import dayjs from 'dayjs';
+import 'dayjs/locale/ko';
+dayjs.locale('ko');
 </script>
 
 <style lang="scss">
@@ -25,7 +25,7 @@ dayjs.locale("ko");
 
 header {
   // height: rem($header-height) !important;
-  
+
   padding: 1.5rem 2rem !important;
   box-sizing: border-box !important;
   background: white;
@@ -42,10 +42,17 @@ header {
   }
 }
 
-
 hr {
   height: rem(1px);
   border: 0;
   background: $gray100;
+}
+
+.green {
+  color: $green;
+}
+
+.orange {
+  color: $orange;
 }
 </style>
