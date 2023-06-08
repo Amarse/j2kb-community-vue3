@@ -10,13 +10,17 @@
           src="https://plus.unsplash.com/premium_photo-1666264200739-caa822df28d3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw0fHx8ZW58MHx8fHx8&auto=format&fit=crop&w=800&q=60"
         />
       </p>
-      <div class="flex flex-column gap-3">
-        <div class="relative flex gap-2 line-height-3 font-gray-900">
-          <p class="flex flex-column">
-            <span class="text-sm">{{ post.category }}</span>
-            <span class="text-xl">{{ post.writer }}</span>
+      <div class="flex flex-column gap-2">
+        <div class="grid gap-2 line-height-3 font-gray-900">
+          <p class="flex flex-column col-fixed" style="width: 82px">
+            <span
+              :class="[post.category == '개발 질문' ? 'green' : 'orange']"
+              class="text-sm"
+              >{{ post.category }}</span
+            >
+            <span class="text-xl font-medium">{{ post.writer }}</span>
           </p>
-          <span class="text-base pt-4">{{ date }}</span>
+          <span class="text-base pt-5">{{ date }}</span>
         </div>
         <p class="mb-3 content text-lg font-black">
           {{ post.content }}
