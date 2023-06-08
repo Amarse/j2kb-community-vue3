@@ -1,7 +1,7 @@
 <template>
   <header>
     <p class="flex justify-content-between align-items-center black">
-      <span class="text-3xl font-medium">대나무숲</span>
+      <span class="text-3xl font-medium font-black">대나무숲</span>
       <button aria-label="hamburger" class="hamburger-button">
         <i class="pi pi-bars" />
       </button>

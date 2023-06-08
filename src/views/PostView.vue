@@ -1,11 +1,11 @@
 <template>
   <div class="post-view-wrapper">
-    <header class="flex justify-content-between align-items-center text-5xl">
+    <header class="flex justify-content-between align-items-center">
       <button aria-label="close" @click="back">
         <i class="pi pi-times" />
       </button>
 
-      <p>글쓰기</p>
+      <p class="text-3xl font-black">글쓰기</p>
       <button aria-label="write" @click="write">
         <i class="pi pi-send" />
       </button>
@@ -19,20 +19,21 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { ref, onMounted } from "vue";
-import { TPost } from "@/assets/models/TPost";
-import Editor from "primevue/editor";
-import router from "@/router";
+import { ref, onMounted } from 'vue';
+import { TPost } from '@/assets/models/TPost';
+import Editor from 'primevue/editor';
+import router from '@/router';
 
 // variables
 const post: TPost = {
-  post_id: "",
-  writer: "",
-  content: "",
-  views:0,
+  post_id: '',
+  writer: '',
+  content: '',
+  views: 0,
   likes: 0,
   reply_ids: [],
-  created_at: "string",
+  created_at: 'string',
+  category: '',
 };
 
 const main = ref<any | null>(null);
@@ -82,6 +83,9 @@ main {
     border-radius: 0;
     border: none;
     border-bottom: rem(1px) solid $gray200;
+  }
+  :deep(.pi) {
+    color: $gray600;
   }
 }
 </style>
