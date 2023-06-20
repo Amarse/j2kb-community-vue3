@@ -3,6 +3,7 @@
     <main class="main">
       <router-view />
     </main>
+    <hr />
     <footer class="footer">
       <button
         v-for="(tab, index) in tabMenu"
@@ -67,6 +68,10 @@ const isActive = (index: number) => {
 };
 </script>
 <style lang="scss" scoped>
+hr {
+  margin: 0;
+}
+
 button {
   border: none;
   background: white;
@@ -86,18 +91,19 @@ button.hamburger-button {
 .main {
   width: 100%;
   position: relative;
-  height: calc(100% - rem($header-height));
+  height: calc(100% - rem($footer-height));
 }
 
 .footer {
-  width: 100%;
+  width: 80%;
   height: rem($footer-height);
   display: flex;
   justify-content: center;
-  border-top: rem(1px) solid $gray100;
   box-sizing: border-box;
+  margin: 0 auto;
   .footer-button {
     padding: rem(28px);
+    flex-grow: 1;
   }
   .active {
     :deep(.pi) {

@@ -4,7 +4,7 @@
     <button @click="back" class="back">
       <i class="pi pi-chevron-left" />
     </button>
-    <span class="ml-5 font-gray-600 text-3xl font-medium">대나무숲</span>
+    <span class="ml-3 font-gray-600 text-3xl font-medium">대나무숲</span>
   </header>
   <main class="main flex flex-column gap-2">
     <!-- post area -->
