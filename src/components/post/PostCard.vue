@@ -72,10 +72,5 @@ const goToDetailView = (id: string) => {
   :deep(.pi) {
     vertical-align: bottom;
   }
-
-  // &:nth-child(2n) {
-  //   // border-top: rem(1px) solid #aaa;
-  //   border-bottom: rem(1px) solid #aaa;
-  // }
 }
 </style>

@@ -1,61 +1,73 @@
 <template>
   <div class="post-detail">
-  <header class="flex mb-2">
-    <button @click="back" class="back">
-      <i class="pi pi-chevron-left" />
-    </button>
-    <span class="ml-3 font-gray-600 text-3xl font-medium">대나무숲</span>
-  </header>
-  <main class="main flex flex-column gap-2">
-    <!-- post area -->
-    <section class="relative bg-white wrapper">
-      <div class="flex align-items-center mb-4">
-        <p class="pr-2 mr-3">
-          <img
-            class="profile-image border-circle"
-            src="https://plus.unsplash.com/premium_photo-1666264200739-caa822df28d3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw0fHx8ZW58MHx8fHx8&auto=format&fit=crop&w=800&q=60"
-          />
-        </p>
-        <p class="flex flex-column gap-2">
-          <span class="text-xl font-medium">{{ post.writer }}</span>
-          <span class="text-sm font-gray-800"
-            >{{ post.created_at }} 조회수 {{ post.views }}</span
-          >
-        </p>
-      </div>
-      <p class="line-height-3 content-space">
-        {{ post.content }}
-      </p>
-      <PostOptions @option="selectedPostOption" class="option" />
-    </section>
-    <!-- comment area -->
-    <section>
-      <p class="flex justify-content-between  align-items-center p-5 bg-white comment-list-header">
-        <span class="text-xl">전체 댓글</span>
-        <div class="flex align-items-center">
-          <button @click="commentOrderBy('desc')" :class="orderBy === 'desc' ? 'selected' : ''" class="text-base">최신순</button>
-          <Divider layout="vertical" class="custom-divider"/>
-          <button @click="commentOrderBy('asc')" :class="orderBy === 'asc' ? 'selected' : ''" class="text-base">등록순</button>
+    <header class="flex mb-2">
+      <button @click="back" class="back">
+        <i class="pi pi-chevron-left" />
+      </button>
+      <span class="ml-3 font-gray-600 text-3xl font-medium">대나무숲</span>
+    </header>
+    <main class="main flex flex-column">
+      <!-- post area -->
+      <section class="relative bg-white wrapper">
+        <div class="flex align-items-center mb-4">
+          <p class="pr-2 mr-3">
+            <img
+              class="profile-image border-circle"
+              src="https://plus.unsplash.com/premium_photo-1666264200739-caa822df28d3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw0fHx8ZW58MHx8fHx8&auto=format&fit=crop&w=800&q=60"
+            />
+          </p>
+          <p class="flex flex-column gap-2">
+            <span class="text-xl font-medium">{{ post.writer }}</span>
+            <span class="text-sm font-gray-800"
+              >{{ post.created_at }} 조회수 {{ post.views }}</span
+            >
+          </p>
         </div>
-      </p>
-      <PostReply v-for="reply, index in replyList" :reply="reply" :key="index"/>
-    </section>
-  </main>
-</div>
+        <p class="line-height-3 content-space">
+          {{ post.content }}
+        </p>
+        <PostOptions @option="selectedPostOption" class="option" />
+      </section>
+      <!-- comment area -->
+      <section class="reply-section">
+        <p class="flex justify-content-between  align-items-center p-5 bg-white comment-list-header">
+          <span class="text-xl">전체 댓글</span>
+          <div class="flex align-items-center">
+            <button @click="commentOrderBy('desc')" :class="orderBy === 'desc' ? 'selected' : ''" class="text-base">최신순</button>
+            <Divider layout="vertical" class="custom-divider"/>
+            <button @click="commentOrderBy('asc')" :class="orderBy === 'asc' ? 'selected' : ''" class="text-base">등록순</button>
+          </div>
+        </p>
+        <div class="reply-scroll-wrapper">
+          <PostReply
+          v-for="(reply, index) in replyList"
+          :reply="reply"
+          :key="index"
+        />
+        </div>
+
+        <div class="reply-input-box">
+          <InputText v-model="reply.content" placeholder="댓글을 입력해주세요." class="w-11 border-noround"/>
+          <button class="reply-button">등록</button>
+        </div>
+      </section>
+    </main>
+  </div>
 </template>
 <script lang="ts" setup>
 import { TPost, TPostReply } from "@/assets/models/TPost";
 import { ref } from "vue";
 import { useRoute } from "vue-router";
-import router from '@/router';
+import router from "@/router";
 import PostOptions from "@/components/post/PostOptions.vue";
 import Divider from "primevue/divider";
+import InputText from "primevue/inputtext";
 import PostReply from "@/components/post/PostReply.vue";
 const route = useRoute();
 
 const back = () => {
   router.back();
-}
+};
 
 const post_id: string | undefined = route.params.id?.toString();
 const post = ref<TPost>({
@@ -65,13 +77,22 @@ const post = ref<TPost>({
   views: 0,
   likes: 0,
   created_at: "",
-  category:'',
+  category: "",
   reply_ids: [],
 });
 
-const replyList = ref<TPostReply[]>([
+const reply = ref<TPostReply>({
+  post_id: post.value.post_id,
+  reply_id: "",
+  writer: "",
+  content: "",
+  depth: 0,
+  bundle_id: 0,
+  bundle_order: 0,
+  created_at: "",
+});
 
-])
+const replyList = ref<TPostReply[]>([]);
 const orderBy = ref<string>("desc");
 
 // methods
@@ -87,21 +108,22 @@ const loadPost = (id: string) => {
       만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.`;
   post.value.likes = 0;
   post.value.created_at = "2023-05-22 13:18";
-  post.value.reply_ids = ["reply1","reply2","reply3"];
+  post.value.reply_ids = ["reply1", "reply2", "reply3"];
   post.value.reply_ids.forEach((id, index) => {
     replyList.value.push({
       post_id: post.value.post_id,
       reply_id: id,
       writer: "김하나",
-      content: "안녕하시렵니까?\n안녕하시렵니까?\n안녕하시렵니까?\n안녕하시렵니까?",
+      content:
+        "안녕하시렵니까?\n안녕하시렵니까?\n안녕하시렵니까?\n안녕하시렵니까?",
       depth: index >= 1 ? 1 : 0,
       bundle_id: 100,
       bundle_order: index >= 1 ? 1 : 0,
       created_at: "2023-05-22 13:18",
-    })
-  })
+    });
+  });
 
-  console.log(replyList.value)
+  console.log(replyList.value);
 };
 
 const selectedPostOption = (option: string) => {
@@ -116,48 +138,71 @@ const selectedPostOption = (option: string) => {
 
 const commentOrderBy = (_orderBy: string) => {
   orderBy.value = _orderBy;
-}
+};
 
 if (post_id !== undefined) {
   loadPost(post_id);
 }
 </script>
 <style lang="scss" scoped>
+
+$reply-input-height: 45px;
 .post-detail {
   background: #f9f7f3;
 
   .main {
-  height: calc(100% - rem($header-height));
-  .wrapper {
-    width: 100%;
-    height: rem(400px);
-    padding: rem(30px) rem($card-padding);
-    border: none;
+    height: calc(100vh - (rem($header-height) + 0.5rem)); //mb-2
+    .wrapper {
+      width: 100%;
+      min-height: rem(300px);
+      height: rem(300px);
+      padding: rem(30px) rem($card-padding);
+      border: none;
 
-    .option {
-      position: absolute;
-      top: rem(40px);
-      right: rem(16px);
+      .option {
+        position: absolute;
+        top: rem(40px);
+        right: rem(16px);
+      }
+
+      .content-space {
+        padding-left: rem(75px);
+      }
     }
 
-    .content-space {
-      padding-left: rem(75px);
+    .comment-list-header {
+      margin-top: 0.5rem;
+      border-bottom: rem(1px) solid $gray600;
+    }
+
+    .reply-section {
+      height: calc(100% - (rem(300px + $reply-input-height) + 0.5rem)); //comment-list-header margin-top
+
+      .reply-scroll-wrapper {
+        height: calc(100% - rem(86.5px));
+        overflow: auto;
+      }
+    }
+
+    :deep(.p-divider.p-divider-vertical) {
+      margin: rem(0px) rem(18px);
+      padding: rem(0);
+      min-height: rem(18px);
+      height: rem(18px);
     }
   }
 
-  .comment-list-header {
-    border-bottom: rem(1px) solid $gray600;
-  }
-
-  :deep(.p-divider.p-divider-vertical) {
-    margin: rem(0px) rem(18px);
-    padding: rem(0);
-    min-height: rem(18px);
-    height: rem(18px);
+  .reply-input-box {
+    display: flex;
+    height: rem($reply-input-height);
+    .reply-button {
+      width: calc(100% - 91.6667%);
+      height: 100%;
+      background: $blue;
+      color: white;
+    }
   }
 }
-}
-
 
 button {
   background: transparent;
@@ -165,6 +210,6 @@ button {
 }
 
 .selected {
-  color:$pink;
+  color: $pink;
 }
 </style>
