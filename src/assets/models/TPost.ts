@@ -23,3 +23,11 @@ export type TPostReply = {
   updated_at?: string;
   deleted_at?: string;
 };
+
+export type MyContent = {  
+  post_id: string;
+  content_id: string;
+  content: string;
+  kind: string;
+  created_at: string;
+}

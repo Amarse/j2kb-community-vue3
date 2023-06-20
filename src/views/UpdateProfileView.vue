@@ -37,9 +37,9 @@
         </ul>
       </div>
     </article>
-    <MyContents
-      v-for="(content, index) in contents"
-      :my-contents="content"
+    <MyContentsCard
+      v-for="(content, index) in contentList"
+      :content="content"
       :key="index"
       @view="moveToPostDetailView"
     />
@@ -47,45 +47,42 @@
   </section>
 </template>
 <script lang="ts" setup>
-import router from '@/router';
-import MyContents from '@/components/my-contens/ContentsCard.vue';
+import { MyContent } from "@/assets/models/TPost";
+import router from "@/router";
+import MyContentsCard from "@/components/my-contents/MyContentsCard.vue";
 
-export type Mycontent = {
-  id: string;
-  content: string;
-	post_id:string;
-  created_at: string;
-};
-
-const contents: Mycontent[] = [
+// 로그인 한 유저의 post_ids, reply_ids 검색을 해서
+// 컨텐츠 리스트를 만든다.
+const contentList: MyContent[] = [
   {
-    id: '댓글',
-		post_id: 'test2',
+    post_id: "test2",
+    content_id: "test2",
+    kind: "댓글",
     content: `대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
       만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
       만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
       만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
       만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
       만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.`,
-    created_at: '2023-05-22 13:18',
+    created_at: "2023-05-22 13:18",
   },
   {
-    id: '게시글',
-		post_id: 'test2',
+    post_id: "test2",
+    content_id: "test2",
+    kind: "게시글",
     content: `대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
       만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
       만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
       만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
       만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
       만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.`,
-    created_at: '2023-05-22 13:18',
+    created_at: "2023-05-22 13:18",
   },
 ];
 
 const moveToPostDetailView = (id: string) => {
   router.push(`/detail/${id}`);
 };
-
 </script>
 <style lang="scss" scoped>
 .view-padding {
