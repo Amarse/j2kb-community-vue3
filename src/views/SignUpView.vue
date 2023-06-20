@@ -30,7 +30,13 @@
     </div>
     <div class="flex gap-2">
       <Button label="회원가입" class="w-full" size="small" @click="signup" />
-      <Button label="취소" class="w-full" size="small" severity="secondary" @click="cancel" />
+      <Button
+        label="취소"
+        class="w-full"
+        size="small"
+        severity="secondary"
+        @click="cancel"
+      />
     </div>
   </TemplateLoginForm>
 </template>
@@ -41,6 +47,10 @@ import TemplateLoginForm from "@/templates/TemplateLoginForm.vue";
 import InputText from "primevue/inputtext";
 import Button from "primevue/button";
 import router from "@/router";
+import { onBeforeMount } from "vue";
+import UserAuth from "@/services/UserAuth";
+import FirebaseDatabase from "@/services/FirebaseDatabase";
+import { Base64 } from 'js-base64';
 
 const user = ref<TUser>({
   email: "",
@@ -48,9 +58,39 @@ const user = ref<TUser>({
   nickname: "",
 });
 
-const signup = () => {
-  //todo something
+const auth = ref<UserAuth | null>(null);
+const database = ref<FirebaseDatabase | null>(null);
+
+const signup = async () => {
+  if (auth.value != null) {
+    try {
+      const result = await auth.value.signUp(
+        user.value.email,
+        user.value.password
+      );
+      // save to user info
+      const refs = `users/${result.user.uid}`;
+      const data: TUser = {
+        email: user.value.email,
+        password: Base64.encode(user.value.password),
+        nickname: user.value.nickname,
+        post_ids: [],
+        reply_ids: [],
+      };
+
+      await database.value?.write(refs, data);
+
+      router.push("/login");
+    } catch (error) {
+      alert(error);
+    }
+  }
 };
+
+onBeforeMount(() => {
+  auth.value = new UserAuth();
+  database.value = new FirebaseDatabase();
+});
 
 const cancel = () => {
   router.push("/login");
