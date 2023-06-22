@@ -1,12 +1,16 @@
 import {
   DataSnapshot,
   Database,
+  ThenableReference,
+  child,
   get,
   getDatabase,
   orderByChild,
+  push,
   query,
   ref,
   set,
+  update,
 } from "firebase/database";
 import { isProxy, toRaw } from "vue";
 
@@ -22,7 +26,20 @@ export default class FirebaseDatabase {
     return set(dataRef, data);
   }
 
-  public getSnapshotChild(refs: string, childKey: string): Promise<DataSnapshot> {
+  public push(refs: string): ThenableReference {
+    const rawObject = this.getRawObject();
+    return push(child(ref(rawObject), refs));
+  }
+
+  public update(value: any): Promise<void> {
+    const rawObject = this.getRawObject();
+    return update(ref(rawObject), value);
+  }
+
+  public getSnapshotChild(
+    refs: string,
+    childKey: string
+  ): Promise<DataSnapshot> {
     const rawObject = this.getRawObject();
     const dataRef = query(ref(rawObject, refs), orderByChild(childKey)).ref;
     return get(dataRef);

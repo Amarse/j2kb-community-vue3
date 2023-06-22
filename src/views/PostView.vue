@@ -50,10 +50,11 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onBeforeMount, onBeforeUnmount } from "vue";
 import { TPost } from "@/assets/models/TPost";
 import Editor from "primevue/editor";
 import router from "@/router";
+import FirebaseDatabase from "@/services/FirebaseDatabase";
 
 // variables
 const post = ref<TPost>({
@@ -70,9 +71,20 @@ const post = ref<TPost>({
 const main = ref<any | null>(null);
 const editorHeight = ref<number>(0);
 
+const database = ref<FirebaseDatabase | null>(null);
+
+// lifecycle
+onBeforeMount(() => {
+  database.value = new FirebaseDatabase();
+});
+
 onMounted(() => {
   // 41 means editor toolbar height
   editorHeight.value = main.value.clientHeight - 41;
+});
+
+onBeforeUnmount(() => {
+  database.value = null;
 });
 
 // methods
@@ -80,9 +92,31 @@ const back = () => {
   router.back();
 };
 
-const write = () => {
-  // todo something
-  // implements to save post info
+const write = async () => {
+  if (database.value != null) {
+    const refs = `posts`;
+    const post_key = await database.value.push(refs).key;
+
+    if (post_key != null) {
+      const data: TPost = {
+        post_id: post_key,
+        category: "question", // temp
+        writer: "박소담", // temp
+        content: post.value.content,
+        views: 0,
+        likes: 0,
+        reply_ids: [],
+        created_at: "",
+      };
+
+      const updates: any = {};
+      updates["/posts/" + post_key] = data;
+
+      await database.value.update(updates);
+
+      router.push("/main");
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
