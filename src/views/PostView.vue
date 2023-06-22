@@ -11,30 +11,61 @@
       </button>
     </header>
     <main ref="main">
-      <Editor
-        v-model="post.content"
-        :editorStyle="`height: ${editorHeight}px`"
-      />
+      <Editor v-model="post.content" :editorStyle="`height: ${editorHeight}px`">
+        <template v-slot:toolbar>
+          <span class="ql-formats">
+            <button v-tooltip.bottom="'Bold'" class="ql-bold"></button>
+            <button v-tooltip.bottom="'Italic'" class="ql-italic"></button>
+            <button
+              v-tooltip.bottom="'Underline'"
+              class="ql-underline"
+            ></button>
+            <select class="ql-background">
+              <option value="red"></option>
+              <option value="orange"></option>
+              <option value="yellow"></option>
+              <option value="green"></option>
+              <option value="blue"></option>
+              <option value="purple"></option>
+              <option value="white"></option>
+              <option value="gray"></option>
+              <option value="black"></option>
+            </select>
+
+            <select class="ql-color">
+              <option value="red"></option>
+              <option value="orange"></option>
+              <option value="yellow"></option>
+              <option value="green"></option>
+              <option value="blue"></option>
+              <option value="purple"></option>
+              <option value="white"></option>
+              <option value="gray"></option>
+              <option value="black"></option>
+            </select>
+          </span>
+        </template>
+      </Editor>
     </main>
   </div>
 </template>
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue';
-import { TPost } from '@/assets/models/TPost';
-import Editor from 'primevue/editor';
-import router from '@/router';
+import { ref, onMounted } from "vue";
+import { TPost } from "@/assets/models/TPost";
+import Editor from "primevue/editor";
+import router from "@/router";
 
 // variables
-const post: TPost = {
-  post_id: '',
-  writer: '',
-  content: '',
+const post = ref<TPost>({
+  post_id: "",
+  writer: "",
+  content: "",
   views: 0,
   likes: 0,
   reply_ids: [],
-  created_at: 'string',
-  category: '',
-};
+  created_at: "",
+  category: "",
+});
 
 const main = ref<any | null>(null);
 const editorHeight = ref<number>(0);
@@ -62,7 +93,6 @@ const write = () => {
   row-gap: 0.5rem;
   background: $gray100;
 }
-
 main {
   height: calc(100% - rem($header-height));
 
@@ -71,11 +101,35 @@ main {
     .p-editor-content {
       border-radius: 0;
       border: none;
+
+      strong {
+        font-weight: bold !important;
+      }
+
+      em {
+        font-style: italic;
+      }
     }
 
     .p-editor-toolbar {
       border-top: rem(1px) solid $gray200;
       border-bottom: rem(1px) solid $gray200;
+
+      &.ql-snow {
+        .ql-picker.ql-expanded {
+          .ql-picker-options {
+            padding: 0.75rem !important;
+            display: grid;
+            gap: 0.25rem;
+            grid-template-columns: 1fr 1fr 1fr;
+            .ql-picker-item {
+              width: 100% !important;
+              height: 1.5rem !important;
+              padding: 0 !important;
+            }
+          }
+        }
+      }
     }
   }
 
