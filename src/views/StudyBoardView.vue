@@ -4,38 +4,41 @@
 <script lang="ts" setup>
 import { TPost } from "@/assets/models/TPost";
 import PostCard from "@/components/post/PostCard.vue";
-// #test
-const postList: TPost[] = [
-  {
-    post_id: "test1",
-    writer: "박소담",
-    category: "스터디/모임",
-    content: `대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
-      만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
-      만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
-      만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
-      만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
-      만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.`,
-    views: 0,
-    likes: 0,
-    created_at: "2023-05-22 13:18",
-    reply_ids: [],
-  },
-  {
-    post_id: "test2",
-    writer: "박소담",
-    category: "스터디/모임",
-    content: `대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
-      만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
-      만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
-      만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
-      만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
-      만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.`,
-    views: 0,
-    likes: 0,
-    created_at: "2023-05-22 13:18",
-    reply_ids: [],
-  },
-];
+import FirebaseDatabase from "@/services/FirebaseDatabase";
+import { onBeforeMount, ref, onBeforeUnmount } from "vue";
+
+const postList = ref<TPost[]>([]);
+const database = ref<FirebaseDatabase | null>(null);
+
+// lifecycle
+onBeforeMount(() => {
+  database.value = new FirebaseDatabase();
+  load("study", "스터디/모임"); // 추후 composition api 함수로 따로 뺄 예정
+});
+
+onBeforeUnmount(() => {
+  database.value = null;
+});
+
+// methods
+const load = async (category: string, categoryKorean: string) => {
+  const snapshot = await database.value?.getSnapshotChild("posts", "category");
+  try {
+    snapshot?.forEach((child) => {
+      if (child.val().category === category) {
+        postList.value.push({
+          post_id: child.val().post_id,
+          category: categoryKorean,
+          writer: child.val().writer,
+          content: child.val().content,
+          views: child.val().views,
+          likes: child.val().likes,
+          reply_ids: child.val().reply_ids === undefined ? [] :  child.val().reply_ids,
+          created_at: child.val().created_at,
+        });
+      }
+    });
+  } catch (error: any) {}
+};
 </script>
 <style lang="scss" scoped></style>

@@ -22,8 +22,7 @@
           </p>
           <span class="text-base pt-5">{{ date }}</span>
         </div>
-        <p class="mb-3 content text-lg font-black">
-          {{ post.content }}
+        <p class="mb-3 content text-lg font-black" v-html="post.content">
         </p>
         <p class="flex gap-5 align-items-center font-gray-900">
           <span class="text-base">
