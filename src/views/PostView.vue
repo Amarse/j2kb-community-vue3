@@ -55,6 +55,10 @@ import { TPost } from "@/assets/models/TPost";
 import Editor from "primevue/editor";
 import router from "@/router";
 import FirebaseDatabase from "@/services/FirebaseDatabase";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+
+dayjs.extend(utc);
 
 // variables
 const post = ref<TPost>({
@@ -70,7 +74,6 @@ const post = ref<TPost>({
 
 const main = ref<any | null>(null);
 const editorHeight = ref<number>(0);
-
 const database = ref<FirebaseDatabase | null>(null);
 
 // lifecycle
@@ -95,7 +98,7 @@ const back = () => {
 const write = async () => {
   if (database.value != null) {
     const refs = `posts`;
-    const post_key = await database.value.push(refs).key;
+    const post_key = database.value.push(refs).key;
 
     if (post_key != null) {
       const data: TPost = {
@@ -106,7 +109,7 @@ const write = async () => {
         views: 0,
         likes: 0,
         reply_ids: [],
-        created_at: "",
+        created_at: dayjs().format().toString(),
       };
 
       const updates: any = {};
