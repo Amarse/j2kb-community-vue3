@@ -16,6 +16,7 @@
         v-model="user.email"
         id="email"
         type="text"
+        :class="inputValid.email"
         placeholder="이메일을 입력해주세요"
       />
     </div>
@@ -25,6 +26,7 @@
         v-model="user.password"
         id="password"
         type="password"
+        :class="inputValid.password"
         placeholder="비밀번호를 입력해주세요"
       />
     </div>
@@ -48,32 +50,91 @@
 </template>
 
 <script lang="ts" setup>
-import { TUser } from "@/assets/models/TUser";
-import TemplateLoginForm from "@/templates/TemplateLoginForm.vue";
-import InputText from "primevue/inputtext";
-import Button from "primevue/button";
-import Checkbox from "primevue/checkbox";
-import { ref } from "vue";
-import router from "@/router";
+import { TUser } from '@/assets/models/TUser';
+import TemplateLoginForm from '@/templates/TemplateLoginForm.vue';
+import InputText from 'primevue/inputtext';
+import Button from 'primevue/button';
+import Checkbox from 'primevue/checkbox';
+import { ref, onMounted } from 'vue';
+import router from '@/router';
+import UserAuth from '@/services/UserAuth';
+import validate from '@/utils/validate';
+import { TValidateResponse } from '@/assets/models/TValidate';
+// import { Base64 } from 'js-base64';
+// import { useAuthStore } from '@/store/authStore';
 
-const user = ref<Pick<TUser, "email" | "password">>({
-  email: "",
-  password: "",
+const auth = ref<UserAuth | null>(null);
+
+const user = ref<Pick<TUser, 'email' | 'password'>>({
+  email: '',
+  password: '',
+});
+
+const inputValid = ref({
+  email: '',
+  password: '',
 });
 
 const rememberEmail = ref<boolean>(false);
 
-const login = () => {
+onMounted(() => {
+  auth.value = new UserAuth();
+});
+
+const login = async (): Promise<void> => {
   // todo something
   // 1. validation check
+  const validateResult = await validateCheck();
+  if (validateResult.status !== 200) {
+    alert(validateResult.message);
+    return;
+  }
   // 2. login -> move to board view
-  // #test
-  router.push("/main");
+  // const changedPassword = Base64.encode(user.value.password);
+  await auth.value
+    ?.login(user.value.email, user.value.password)
+    .then(() => {
+      router.push('/main');
+    })
+    .catch(() => {
+      alert('가입된 이메일이 아닙니다.');
+      router.push('sign-up');
+    });
+  // pinia 코드 인데 아직 테스트 중 (스토어로 만들어서 뺀 코드)
+  // await useAuthStore().login(user.value.email, user.value.password);
+  // if (!useAuthStore().error) {
+  //   router.push('/main');
+  //   // Login successful, navigate to another page or perform other actions
+  // }
+  // 3. 가입되지 않았다면??
+};
+
+const validateCheck = async (): Promise<TValidateResponse> => {
+  // 이메일
+  const isEmailValid = validate.emailValidCheck(user.value.email);
+  if (!isEmailValid) {
+    inputValid.value.email = 'p-invalid';
+    return { status: -1, message: '이메일 형식 맞춰 입력해주세요.' };
+  }
+  inputValid.value.email = '';
+
+  // 비밀번호
+  const isPasswordValid = validate.passwordValidCheck(user.value.password);
+  if (!isPasswordValid) {
+    inputValid.value.password = 'p-invalid';
+    return {
+      status: -1,
+      message: '6자 ~ 24자 이내, 영대소문자 + 숫자 + 특수문자를 포함해주세요.',
+    };
+  }
+  inputValid.value.password = '';
+
+  return { status: 200, message: '' };
 };
 
 const goToSignUpView = () => {
   // todo something
-  router.push("/sign-up");
+  router.push('/sign-up');
 };
 
 const goToFindPasswordView = () => {
