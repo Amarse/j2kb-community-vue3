@@ -1,4 +1,4 @@
-import { getAuth, createUserWithEmailAndPassword, Auth, signInWithEmailAndPassword, UserCredential } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, Auth, signInWithEmailAndPassword, UserCredential, deleteUser } from "firebase/auth";
 import { firebaseApp } from "./firebase";
 
 export default class UserAuth {
@@ -11,5 +11,14 @@ export default class UserAuth {
   }
   public login(email: string, password: string): Promise<UserCredential> {
     return signInWithEmailAndPassword(this.auth, email, password);
+  }
+  public withdrawal(): Promise<void> {
+    const user = this.auth.currentUser;
+    if(user !== null) {
+      return deleteUser(user);
+    }
+    else {
+      return Promise.reject('not withdrawal');
+    }
   }
 }
