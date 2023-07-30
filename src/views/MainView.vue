@@ -39,7 +39,7 @@ const tabMenu = [
   {
     icon: "pi pi-plus-circle",
     label: "post",
-    link: "/post",
+    link: "/post/write",
   },
   {
     icon: "pi pi-heart",
