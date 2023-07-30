@@ -14,9 +14,9 @@
         <div class="grid gap-2 line-height-3 font-gray-900">
           <p class="flex flex-column col-fixed" style="width: 82px">
             <span
-              :class="[post.category == '개발 질문' ? 'green' : 'orange']"
+              :class="[post.category == 'question' ? 'green' : 'orange']"
               class="text-sm"
-              >{{ post.category }}</span
+              >{{ post.categoryKorean }}</span
             >
             <span class="text-xl font-medium">{{ post.writer }}</span>
           </p>

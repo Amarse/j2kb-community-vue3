@@ -18,7 +18,7 @@
         :modelValue="selectedCateogry"
         @update:modelValue="selectCategory"
         :options="categories"
-        optionLabel="code"
+        optionLabel="name"
         placeholder="카테고리를 선택해주세요."
         class="w-full border-none border-noround"
       />
@@ -85,8 +85,8 @@ const emit = defineEmits<{
 const main = ref<any | null>(null);
 const editorHeight = ref<number>(0);
 const categories = ref([
-  { code: "study" },
-  { code: "qeustion" },
+  { name: "스터디/모임", code: "study" },
+  { name: "개발 질문", code: "question" },
 ]);
 
 const selectedCateogry = ref<any>({});
@@ -96,14 +96,15 @@ onMounted(() => {
   editorHeight.value = main.value.clientHeight - 41;
 });
 
-const selectCategory = (value: { code: string }) => {
+const selectCategory = (value: { name: string, code: string }) => {
+  props.post.categoryKorean = value.name;
   props.post.category = value.code;
 }
 
 watch(
   () => props.post,
   (value) => {
-    selectedCateogry.value = { code: value.category }
+    selectedCateogry.value = { name: value.categoryKorean, code: value.category }
   },
   { deep: true }
 );
