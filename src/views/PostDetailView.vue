@@ -154,13 +154,22 @@ const loadPost = async (id: string) => {
   }
 };
 
-const selectedPostOption = (option: string) => {
+const selectedPostOption = async (option: string) => {
   if (option === "modify") {
     // 수정
     router.push(`/post/edit/${post_id}`);
   } else {
     // 삭제
-    // todo something
+    if(confirm("게시글을 정말 삭제하시겠습니까?")) {
+      const refs = `posts/${post_id}`;
+      await database.value?.remove(refs)
+      .then(() => {
+        router.back();
+      })
+      .catch(error => {
+        console.log(error);
+      });
+    }
   }
 };
 

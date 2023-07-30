@@ -9,6 +9,7 @@ import {
   push,
   query,
   ref,
+  remove,
   set,
   update,
 } from "firebase/database";
@@ -34,6 +35,11 @@ export default class FirebaseDatabase {
   public update(value: any): Promise<void> {
     const rawObject = this.getRawObject();
     return update(ref(rawObject), value);
+  }
+
+  public remove(refs: string): Promise<void> {
+    const rawObject = this.getRawObject();
+    return remove(ref(rawObject, refs));
   }
 
   public getSnapshotChild(
