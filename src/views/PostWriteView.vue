@@ -8,7 +8,7 @@
   />
 </template>
 <script lang="ts" setup>
-import { ref, onBeforeUnmount, onBeforeMount } from "vue";
+import { ref, onBeforeUnmount } from "vue";
 import TemplatePostForm from "@/templates/TemplatePostForm.vue";
 import { TPost } from "@/assets/models/TPost";
 import router from "@/router";
@@ -28,15 +28,13 @@ const post = ref<TPost>({
   reply_ids: [],
   created_at: "",
   category: "",
+  categoryKorean: "",
 });
 
 const database = ref<FirebaseDatabase | null>(null);
+database.value = new FirebaseDatabase();
 
 // lifecycle
-onBeforeMount(() => {
-  database.value = new FirebaseDatabase();
-});
-
 onBeforeUnmount(() => {
   database.value = null;
 });
@@ -48,6 +46,7 @@ const back = () => {
 
 const setCategory = (category: any) => {
   post.value.category = category.code;
+  post.value.categoryKorean = category.name;
 }
 
 const write = async () => {
@@ -59,6 +58,7 @@ const write = async () => {
       const data: TPost = {
         post_id: post_key,
         category: post.value.category,
+        categoryKorean: post.value.categoryKorean,
         writer: "박소담", // temp
         content: post.value.content,
         views: 0,

@@ -19,19 +19,17 @@
           <p class="flex flex-column gap-2">
             <span class="text-xl font-medium">{{ post.writer }}</span>
             <span class="text-sm font-gray-800"
-              >{{ post.created_at }} 조회수 {{ post.views }}</span
+              >{{ created_at }} 조회수 {{ post.views }}</span
             >
           </p>
         </div>
-        <p class="line-height-3 content-space">
-          {{ post.content }}
-        </p>
+        <p class="line-height-3 content-space" v-html="post.content" />
         <PostOptions @option="selectedPostOption" class="option" />
       </section>
       <!-- comment area -->
       <section class="reply-section">
         <p class="flex justify-content-between  align-items-center p-5 bg-white comment-list-header">
-          <span class="text-xl">전체 댓글</span>
+            <span class="text-xl">전체 댓글</span>
           <div class="flex align-items-center">
             <button @click="commentOrderBy('desc')" :class="orderBy === 'desc' ? 'selected' : ''" class="text-base">최신순</button>
             <Divider layout="vertical" class="custom-divider"/>
@@ -56,20 +54,26 @@
 </template>
 <script lang="ts" setup>
 import { TPost, TPostReply } from "@/assets/models/TPost";
-import { ref } from "vue";
+import { computed, onBeforeMount, onBeforeUnmount, ref } from "vue";
 import { useRoute } from "vue-router";
 import router from "@/router";
 import PostOptions from "@/components/post/PostOptions.vue";
 import Divider from "primevue/divider";
 import InputText from "primevue/inputtext";
 import PostReply from "@/components/post/PostReply.vue";
+import FirebaseDatabase from "@/services/FirebaseDatabase";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+
+dayjs.extend(utc);
 const route = useRoute();
 
 const back = () => {
   router.back();
 };
 
-const post_id: string | undefined = route.params.id?.toString();
+const post_id: string | undefined = route.params.id.toString();
+const database = ref<FirebaseDatabase | null>(null);
 const post = ref<TPost>({
   post_id: "",
   writer: "",
@@ -78,6 +82,7 @@ const post = ref<TPost>({
   likes: 0,
   created_at: "",
   category: "",
+  categoryKorean: "",
   reply_ids: [],
 });
 
@@ -95,41 +100,66 @@ const reply = ref<TPostReply>({
 const replyList = ref<TPostReply[]>([]);
 const orderBy = ref<string>("desc");
 
-// methods
-const loadPost = (id: string) => {
-  // #test
-  post.value.post_id = id;
-  post.value.writer = "박소담";
-  post.value.content = `대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
-      만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
-      만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
-      만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
-      만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
-      만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.`;
-  post.value.likes = 0;
-  post.value.created_at = "2023-05-22 13:18";
-  post.value.reply_ids = ["reply1", "reply2", "reply3"];
-  post.value.reply_ids.forEach((id, index) => {
-    replyList.value.push({
-      post_id: post.value.post_id,
-      reply_id: id,
-      writer: "김하나",
-      content:
-        "안녕하시렵니까?\n안녕하시렵니까?\n안녕하시렵니까?\n안녕하시렵니까?",
-      depth: index >= 1 ? 1 : 0,
-      bundle_id: 100,
-      bundle_order: index >= 1 ? 1 : 0,
-      created_at: "2023-05-22 13:18",
-    });
-  });
+const created_at = computed(() => {
+  if(post.value?.created_at === "") {
+    return "";
+  }
+  return dayjs(post.value?.created_at).format("YYYY-MM-DD hh:mm:ss");
+});
 
-  console.log(replyList.value);
+// lifecycle
+database.value = new FirebaseDatabase();
+
+onBeforeMount(() => {
+  loadPost(post_id);
+});
+
+onBeforeUnmount(() => {
+  database.value = null;
+});
+
+// methods
+const loadPost = async (id: string) => {
+  const snapshot = await database.value?.getSnapshotChild("posts", "post_id");
+  try {
+    snapshot?.forEach((child) => {
+      if (child.val().post_id === id) {
+        post.value = {
+          post_id: child.val().post_id,
+          category: child.val().category,
+          categoryKorean: child.val().categoryKorean,
+          writer: child.val().writer,
+          content: child.val().content,
+          views: child.val().views,
+          likes: child.val().likes,
+          reply_ids: child.val().reply_ids === undefined ? [] :  child.val().reply_ids,
+          created_at: dayjs(child.val().created_at).format().toString(),
+        };
+      }
+    });
+
+    post.value.reply_ids.forEach((id, index) => {
+      replyList.value.push({
+        post_id: post.value.post_id,
+        reply_id: id,
+        writer: "김하나",
+        content:
+          "안녕하시렵니까?\n안녕하시렵니까?\n안녕하시렵니까?\n안녕하시렵니까?",
+        depth: index >= 1 ? 1 : 0,
+        bundle_id: 100,
+        bundle_order: index >= 1 ? 1 : 0,
+        created_at: "2023-05-22 13:18",
+      });
+    });
+  } catch (error: any) {
+    console.error(error);
+  }
 };
 
 const selectedPostOption = (option: string) => {
   if (option === "modify") {
     // 수정
-    // todo something
+    router.push(`/post/edit/${post_id}`);
   } else {
     // 삭제
     // todo something

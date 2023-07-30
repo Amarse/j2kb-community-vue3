@@ -29,7 +29,8 @@ const postList: TPost[] = [
   {
     post_id: 'test1',
     writer: '박소담',
-    category: '스터디/모임',
+    category: 'study',
+    categoryKorean: "스터디/모임",
     content: `대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
       만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
       만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
@@ -44,7 +45,8 @@ const postList: TPost[] = [
   {
     post_id: 'test2',
     writer: '박소담',
-    category: '개발 질문',
+    category: 'question',
+    categoryKorean: "개발 질문",
     content: `대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
       만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
       만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을

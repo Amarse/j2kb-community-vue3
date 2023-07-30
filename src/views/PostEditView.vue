@@ -23,6 +23,7 @@ const post = ref<TPost>({
   reply_ids: [],
   created_at: "",
   category: "",
+  categoryKorean: "",
 });
 const database = ref<FirebaseDatabase | null>(null);
 const post_id: string | undefined = route.params.id?.toString();
@@ -43,6 +44,7 @@ const edit = async () => {
   const data: TPost = {
     post_id: post_id,
     category: post.value.category,
+    categoryKorean: post.value.categoryKorean,
     writer: post.value.writer, // temp
     content: post.value.content,
     views: post.value.views,
@@ -66,6 +68,7 @@ const loadPost = async (id: string) => {
         post.value = {
           post_id: child.val().post_id,
           category: child.val().category,
+          categoryKorean: child.val().categoryKorean,
           writer: child.val().writer,
           content: child.val().content,
           views: child.val().views,

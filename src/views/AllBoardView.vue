@@ -16,7 +16,7 @@ const database = ref<FirebaseDatabase | null>(null);
 // lifecycle
 onBeforeMount(() => {
   database.value = new FirebaseDatabase();
-  load(null, null);
+  load(null);
 });
 
 onBeforeUnmount(() => {
@@ -24,14 +24,15 @@ onBeforeUnmount(() => {
 });
 
 // methods
-const load = async (category: string | null, categoryKorean: string | null) => {
+const load = async (category: string | null) => {
   const snapshot = await database.value?.getSnapshotChild("posts", "category");
   try {
     snapshot?.forEach((child) => {
-      if (category === null && categoryKorean === null) {
+      if (category === null) {
         postList.value.push({
           post_id: child.val().post_id,
-          category: child.val().categoryKorean,
+          category: child.val().category,
+          categoryKorean: child.val().categoryKorean,
           writer: child.val().writer,
           content: child.val().content,
           views: child.val().views,
@@ -43,7 +44,8 @@ const load = async (category: string | null, categoryKorean: string | null) => {
       } else if (child.val().category === category) {
         postList.value.push({
           post_id: child.val().post_id,
-          category: child.val().categoryKorean,
+          category: child.val().category,
+          categoryKorean: child.val().categoryKorean,
           writer: child.val().writer,
           content: child.val().content,
           views: child.val().views,

@@ -12,7 +12,7 @@ const database = ref<FirebaseDatabase | null>(null);
 // lifecycle
 onBeforeMount(() => {
   database.value = new FirebaseDatabase();
-  load("question", "개발 질문");
+  load("question");
 });
 
 onBeforeUnmount(() => {
@@ -20,14 +20,15 @@ onBeforeUnmount(() => {
 });
 
 // methods
-const load = async (category: string, categoryKorean: string) => {
+const load = async (category: string) => {
   const snapshot = await database.value?.getSnapshotChild("posts", "category");
   try {
     snapshot?.forEach((child) => {
       if (child.val().category === category) {
         postList.value.push({
           post_id: child.val().post_id,
-          category: categoryKorean,
+          category: child.val().category,
+          categoryKorean: child.val().categoryKorean,
           writer: child.val().writer,
           content: child.val().content,
           views: child.val().views,
