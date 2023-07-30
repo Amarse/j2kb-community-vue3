@@ -43,16 +43,19 @@
       :key="index"
       @view="moveToPostDetailView"
     />
-    <span class="withdrawal font-gray-600">회원탈퇴</span>
+    <span class="withdrawal font-gray-600" @click="withdrawal">회원탈퇴</span>
   </section>
 </template>
 <script lang="ts" setup>
 import { MyContent } from "@/assets/models/TPost";
 import router from "@/router";
 import MyContentsCard from "@/components/my-contents/MyContentsCard.vue";
+import UserAuth from "@/services/UserAuth";
+import { onBeforeMount, onBeforeUnmount, ref } from "vue";
 
 // 로그인 한 유저의 post_ids, reply_ids 검색을 해서
 // 컨텐츠 리스트를 만든다.
+const auth = ref<UserAuth | null>(null);
 const contentList: MyContent[] = [
   {
     post_id: "test2",
@@ -80,8 +83,32 @@ const contentList: MyContent[] = [
   },
 ];
 
+// lifecycle
+onBeforeMount(() => {
+  auth.value = new UserAuth();
+});
+
+onBeforeUnmount(() => {
+  auth.value = null;
+});
+
 const moveToPostDetailView = (id: string) => {
   router.push(`/detail/${id}`);
+};
+
+const withdrawal = async () => {
+  if (auth.value != null) {
+    try {
+      await auth.value.withdrawal();
+      alert("회원 탈퇴가 완료되었습니다.");
+
+      // todo something
+      // 회원 탈퇴 완료 시 로그인 화면으로 이동
+      // router.push("/login");
+    } catch (error) {
+      alert("회원 탈퇴 실패하였습니다.");
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
