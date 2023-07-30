@@ -61,7 +61,14 @@ const edit = async () => {
   const updates: any = {};
   updates["/posts/" + post_id] = data;
 
-  await database.value?.update(updates);
+  await database.value
+    ?.update(updates)
+    .then(() => {
+      router.back();
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 };
 
 const loadPost = async (id: string) => {
