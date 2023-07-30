@@ -2,25 +2,24 @@
   <PostCard v-for="post in postList" :post="post"></PostCard>
 </template>
 <script lang="ts" setup>
+import { ref, onBeforeUnmount } from "vue";
 import { TPost } from "@/assets/models/TPost";
 import PostCard from "@/components/post/PostCard.vue";
 import FirebaseDatabase from "@/services/FirebaseDatabase";
-import { onBeforeMount, ref, onBeforeUnmount } from "vue";
 
 const postList = ref<TPost[]>([]);
 const database = ref<FirebaseDatabase | null>(null);
-
-// lifecycle
-onBeforeMount(() => {
-  database.value = new FirebaseDatabase();
-  load("study"); // 추후 composition api 함수로 따로 뺄 예정
-});
 
 onBeforeUnmount(() => {
   database.value = null;
 });
 
 // methods
+const init = () => {
+  database.value = new FirebaseDatabase();
+  load("study"); // 추후 composition api 함수로 따로 뺄 예정
+};
+
 const load = async (category: string) => {
   const snapshot = await database.value?.getSnapshotChild("posts", "category");
   try {
@@ -42,5 +41,7 @@ const load = async (category: string) => {
     });
   } catch (error: any) {}
 };
+
+init();
 </script>
 <style lang="scss" scoped></style>

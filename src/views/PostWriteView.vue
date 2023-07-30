@@ -9,14 +9,15 @@
 </template>
 <script lang="ts" setup>
 import { ref, onBeforeUnmount } from "vue";
-import TemplatePostForm from "@/templates/TemplatePostForm.vue";
 import { TPost } from "@/assets/models/TPost";
 import router from "@/router";
 import FirebaseDatabase from "@/services/FirebaseDatabase";
+import TemplatePostForm from "@/templates/TemplatePostForm.vue";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 
 dayjs.extend(utc);
+const database = ref<FirebaseDatabase | null>(null);
 
 // variables
 const post = ref<TPost>({
@@ -31,15 +32,15 @@ const post = ref<TPost>({
   categoryKorean: "",
 });
 
-const database = ref<FirebaseDatabase | null>(null);
-database.value = new FirebaseDatabase();
-
-// lifecycle
 onBeforeUnmount(() => {
   database.value = null;
 });
 
 // methods
+const init = () => {
+  database.value = new FirebaseDatabase();
+}
+
 const back = () => {
   router.back();
 };
@@ -76,6 +77,8 @@ const write = async () => {
     }
   }
 };
+
+init();
 </script>
 <style lang="scss" scoped>
 .post-view-wrapper {

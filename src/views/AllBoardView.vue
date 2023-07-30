@@ -6,24 +6,24 @@
   ></PostCard>
 </template>
 <script lang="ts" setup>
+import { onBeforeUnmount, ref } from "vue";
 import { TPost } from "@/assets/models/TPost";
-import PostCard from "@/components/post/PostCard.vue";
 import FirebaseDatabase from "@/services/FirebaseDatabase";
-import { onBeforeMount, onBeforeUnmount, ref } from "vue";
+import PostCard from "@/components/post/PostCard.vue";
+
 const postList = ref<TPost[]>([]);
 const database = ref<FirebaseDatabase | null>(null);
-
-// lifecycle
-onBeforeMount(() => {
-  database.value = new FirebaseDatabase();
-  load(null);
-});
 
 onBeforeUnmount(() => {
   database.value = null;
 });
 
 // methods
+const init = () => {
+  database.value = new FirebaseDatabase();
+  load(null);
+};
+
 const load = async (category: string | null) => {
   const snapshot = await database.value?.getSnapshotChild("posts", "category");
   try {
@@ -60,5 +60,7 @@ const load = async (category: string | null) => {
     console.error(error);
   }
 };
+
+init();
 </script>
 <style lang="scss" scoped></style>

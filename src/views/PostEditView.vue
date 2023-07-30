@@ -2,18 +2,22 @@
   <TemplatePostForm mode="edit" :post="post" @back="back" @edit="edit" />
 </template>
 <script lang="ts" setup>
-import TemplatePostForm from "@/templates/TemplatePostForm.vue";
-import { TPost } from "@/assets/models/TPost";
 import { onBeforeUnmount, ref } from "vue";
-import FirebaseDatabase from "@/services/FirebaseDatabase";
 import { useRoute } from "vue-router";
+import { TPost } from "@/assets/models/TPost";
 import router from "@/router";
+import FirebaseDatabase from "@/services/FirebaseDatabase";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
+import TemplatePostForm from "@/templates/TemplatePostForm.vue";
+
 dayjs.extend(utc);
 
 // variables
 const route = useRoute();
+const database = ref<FirebaseDatabase | null>(null);
+const post_id: string | undefined = route.params.id?.toString();
+
 const post = ref<TPost>({
   post_id: "",
   writer: "",
@@ -25,17 +29,17 @@ const post = ref<TPost>({
   category: "",
   categoryKorean: "",
 });
-const database = ref<FirebaseDatabase | null>(null);
-const post_id: string | undefined = route.params.id?.toString();
 
-database.value = new FirebaseDatabase();
-
-// lifecycle
 onBeforeUnmount(() => {
   database.value = null;
 });
 
 // methods
+const init = () => {
+  database.value = new FirebaseDatabase();
+  loadPost(post_id);
+};
+
 const back = () => {
   router.back();
 };
@@ -84,9 +88,7 @@ const loadPost = async (id: string) => {
   }
 };
 
-if (post_id !== undefined) {
-  loadPost(post_id);
-}
+init();
 </script>
 <style lang="scss" scoped>
 .post-view-wrapper {

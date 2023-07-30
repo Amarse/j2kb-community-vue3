@@ -54,26 +54,25 @@
 </template>
 <script lang="ts" setup>
 import { TPost, TPostReply } from "@/assets/models/TPost";
-import { computed, onBeforeMount, onBeforeUnmount, ref } from "vue";
+import { computed, onBeforeUnmount, ref } from "vue";
 import { useRoute } from "vue-router";
 import router from "@/router";
-import PostOptions from "@/components/post/PostOptions.vue";
-import Divider from "primevue/divider";
-import InputText from "primevue/inputtext";
-import PostReply from "@/components/post/PostReply.vue";
 import FirebaseDatabase from "@/services/FirebaseDatabase";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
+import PostOptions from "@/components/post/PostOptions.vue";
+import PostReply from "@/components/post/PostReply.vue";
+import Divider from "primevue/divider";
+import InputText from "primevue/inputtext";
 
 dayjs.extend(utc);
+
 const route = useRoute();
-
-const back = () => {
-  router.back();
-};
-
 const post_id: string | undefined = route.params.id.toString();
 const database = ref<FirebaseDatabase | null>(null);
+const replyList = ref<TPostReply[]>([]);
+const orderBy = ref<string>("desc");
+
 const post = ref<TPost>({
   post_id: "",
   writer: "",
@@ -97,9 +96,6 @@ const reply = ref<TPostReply>({
   created_at: "",
 });
 
-const replyList = ref<TPostReply[]>([]);
-const orderBy = ref<string>("desc");
-
 const created_at = computed(() => {
   if(post.value?.created_at === "") {
     return "";
@@ -107,18 +103,20 @@ const created_at = computed(() => {
   return dayjs(post.value?.created_at).format("YYYY-MM-DD hh:mm:ss");
 });
 
-// lifecycle
-database.value = new FirebaseDatabase();
-
-onBeforeMount(() => {
-  loadPost(post_id);
-});
-
 onBeforeUnmount(() => {
   database.value = null;
 });
 
 // methods
+const init = () => {
+  database.value = new FirebaseDatabase();
+  loadPost(post_id);
+};
+
+const back = () => {
+  router.back();
+};
+
 const loadPost = async (id: string) => {
   const snapshot = await database.value?.getSnapshotChild("posts", "post_id");
   try {
@@ -170,9 +168,7 @@ const commentOrderBy = (_orderBy: string) => {
   orderBy.value = _orderBy;
 };
 
-if (post_id !== undefined) {
-  loadPost(post_id);
-}
+init();
 </script>
 <style lang="scss" scoped>
 
