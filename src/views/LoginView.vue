@@ -50,21 +50,19 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onBeforeUnmount } from "vue";
+import { ref } from "vue";
 import { TUser } from "@/assets/models/TUser";
 import { TValidateResponse } from "@/assets/models/TValidate";
-import { Base64 } from 'js-base64';
+import { Base64 } from "js-base64";
 import TemplateLoginForm from "@/templates/TemplateLoginForm.vue";
 import router from "@/router";
-import UserAuth from "@/services/UserAuth";
 import validate from "@/utils/validate";
 import InputText from "primevue/inputtext";
 import Button from "primevue/button";
 import Checkbox from "primevue/checkbox";
+import { useAuthStore } from "@/stores/authStore.ts";
 
-// import { useAuthStore } from '@/store/authStore';
-
-const auth = ref<UserAuth | null>(null);
+const authStore = useAuthStore();
 
 const user = ref<Pick<TUser, "email" | "password">>({
   email: "",
@@ -78,34 +76,17 @@ const inputValid = ref({
 
 const rememberEmail = ref<boolean>(false);
 
-onBeforeUnmount(() => {
-  auth.value = null;
-});
-
-// methods
-const init = () => {
-  auth.value = new UserAuth();
-};
-
 const login = async (): Promise<void> => {
-  // todo something
   // 1. validation check
   const validateResult = await validateCheck();
   if (validateResult.status !== 200) {
     alert(validateResult.message);
     return;
   }
-  // 2. login -> move to board view
+  // 2. login
   const encodePassword = Base64.encode(user.value.password);
-  await auth.value
-    ?.login(user.value.email, encodePassword)
-    .then(() => {
-      router.push("/main");
-    })
-    .catch(() => {
-      alert("가입된 이메일이 아닙니다.");
-      router.push("sign-up");
-    });
+  await authStore.login(user.value.email, encodePassword);
+
   // pinia 코드 인데 아직 테스트 중 (스토어로 만들어서 뺀 코드)
   // await useAuthStore().login(user.value.email, user.value.password);
   // if (!useAuthStore().error) {
@@ -146,8 +127,6 @@ const goToSignUpView = () => {
 const goToFindPasswordView = () => {
   // todo something
 };
-
-init();
 </script>
 
 <style lang="scss" scoped></style>

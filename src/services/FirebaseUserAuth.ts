@@ -1,4 +1,4 @@
-import { getAuth, createUserWithEmailAndPassword, Auth, signInWithEmailAndPassword, UserCredential, deleteUser } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, Auth, signInWithEmailAndPassword, UserCredential, deleteUser, updateProfile } from "firebase/auth";
 import { firebaseApp } from "./firebase";
 
 export default class UserAuth {
@@ -16,6 +16,15 @@ export default class UserAuth {
     const user = this.auth.currentUser;
     if(user !== null) {
       return deleteUser(user);
+    }
+    else {
+      return Promise.reject('not withdrawal');
+    }
+  }
+  public updateDisplayName(nickname: string): Promise<void> {
+    const user = this.auth.currentUser;
+    if(user !== null) {
+      return updateProfile(user, {displayName: nickname});
     }
     else {
       return Promise.reject('not withdrawal');

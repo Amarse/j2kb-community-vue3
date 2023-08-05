@@ -50,12 +50,12 @@
 import { MyContent } from "@/assets/models/TPost";
 import router from "@/router";
 import MyContentsCard from "@/components/my-contents/MyContentsCard.vue";
-import UserAuth from "@/services/UserAuth";
+import FirebaseUserAuth from "@/services/FirebaseUserAuth";
 import { onBeforeMount, onBeforeUnmount, ref } from "vue";
 
 // 로그인 한 유저의 post_ids, reply_ids 검색을 해서
 // 컨텐츠 리스트를 만든다.
-const auth = ref<UserAuth | null>(null);
+const auth = ref<FirebaseUserAuth | null>(null);
 const contentList: MyContent[] = [
   {
     post_id: "test2",
@@ -85,7 +85,7 @@ const contentList: MyContent[] = [
 
 // lifecycle
 onBeforeMount(() => {
-  auth.value = new UserAuth();
+  auth.value = new FirebaseUserAuth();
 });
 
 onBeforeUnmount(() => {
@@ -132,3 +132,4 @@ const withdrawal = async () => {
   }
 }
 </style>
+@/services/FirebaseUserAuth

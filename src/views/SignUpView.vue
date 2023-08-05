@@ -49,7 +49,7 @@ import { TUser } from "@/assets/models/TUser";
 import { Base64 } from "js-base64";
 import { TValidateResponse } from "@/assets/models/TValidate";
 import router from "@/router";
-import UserAuth from "@/services/UserAuth";
+import FirebaseUserAuth from "@/services/FirebaseUserAuth";
 import validate from "@/utils/validate";
 import FirebaseDatabase from "@/services/FirebaseDatabase";
 import TemplateLoginForm from "@/templates/TemplateLoginForm.vue";
@@ -69,7 +69,7 @@ const inputValid = ref({
   nickname: "",
 });
 
-const auth = ref<UserAuth | null>(null);
+const auth = ref<FirebaseUserAuth | null>(null);
 const database = ref<FirebaseDatabase | null>(null);
 
 onBeforeUnmount(() => {
@@ -79,7 +79,7 @@ onBeforeUnmount(() => {
 
 // methods
 const init = () => {
-  auth.value = new UserAuth();
+  auth.value = new FirebaseUserAuth();
   database.value = new FirebaseDatabase();
 };
 
@@ -104,6 +104,9 @@ const signup = async () => {
         user.value.email,
         Base64.encode(user.value.password)
       );
+
+      await auth.value.updateDisplayName(user.value.nickname);
+
       // 데이터베이스에 유저 정보 저장
       const refs = `users/${result.user.uid}`;
       const data: TUser = {
@@ -196,3 +199,4 @@ const cancel = () => {
 init();
 </script>
 <style lang="scss" scoped></style>
+@/services/FirebaseUserAuth
