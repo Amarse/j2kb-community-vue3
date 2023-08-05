@@ -130,13 +130,15 @@ const loadPost = async (id: string) => {
           nickname: child.val().nickname,
           email: child.val().email,
           content: child.val().content,
-          views: child.val().views,
+          views: child.val().views + 1,
           likes: child.val().likes,
           reply_ids: child.val().reply_ids === undefined ? [] :  child.val().reply_ids,
           created_at: dayjs(child.val().created_at).format().toString(),
         };
       }
     });
+
+    
 
     post.value.reply_ids.forEach((id, index) => {
       replyList.value.push({
@@ -151,6 +153,12 @@ const loadPost = async (id: string) => {
         created_at: "2023-05-22 13:18",
       });
     });
+    
+    // 조회수 증가
+    const updates: any = {};
+    updates["/posts/" + id] = post.value;
+    await database.value?.update(updates);
+    
   } catch (error: any) {
     console.error(error);
   }
