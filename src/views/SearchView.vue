@@ -31,20 +31,20 @@
   </main>
 </template>
 <script lang="ts" setup>
-import { ref } from 'vue';
-import { TPost } from '@/assets/models/TPost';
-import { computed } from 'vue';
-import router from '@/router';
-import InputText from 'primevue/inputtext';
-import PostList from '@/components/post/PostList.vue';
+import { ref } from "vue";
+import { TPost } from "@/assets/models/TPost";
+import { computed } from "vue";
+import router from "@/router";
+import InputText from "primevue/inputtext";
+import PostList from "@/components/post/PostList.vue";
 
 const message = computed(() => {
-  if (isSearch.value) return '검색 결과를 찾을 수 없습니다.';
-  else return '검색어를 입력해주세요.';
+  if (isSearch.value) return "검색 결과를 찾을 수 없습니다.";
+  else return "검색어를 입력해주세요.";
 });
 
 // variable
-const searchKeyword = ref<string>('');
+const searchKeyword = ref<string>("");
 const isSearch = ref<boolean>(false);
 const postList = ref<TPost[]>([]);
 
@@ -61,9 +61,11 @@ const search = () => {
   // #test
   postList.value = [
     {
-      post_id: 'test1',
-      writer: '박소담',
-      category: '스터디/모임',
+      post_id: "test1",
+      nickname: "piou",
+      email: "test123456@test.com",
+      category: "study",
+      categoryKorean: "스터디/모임",
       content: `대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
       만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
       만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
@@ -72,13 +74,15 @@ const search = () => {
       만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.`,
       views: 0,
       likes: 0,
-      created_at: '2023-05-22 13:18',
+      created_at: "2023-05-22 13:18",
       reply_ids: [],
     },
     {
-      post_id: 'test2',
-      writer: '박소담',
-      category: '스터디/모임',
+      post_id: "test2",
+      nickname: "piou",
+      email: "test123456@test.com",
+      category: "study",
+      categoryKorean: "스터디/모임",
       content: `대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
       만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
       만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
@@ -87,13 +91,15 @@ const search = () => {
       만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.`,
       views: 0,
       likes: 0,
-      created_at: '2023-05-22 13:18',
+      created_at: "2023-05-22 13:18",
       reply_ids: [],
     },
     {
-      post_id: 'test2',
-      writer: '박소담',
-      category: '스터디/모임',
+      post_id: "test2",
+      nickname: "piou",
+      email: "test123456@test.com",
+      category: "study",
+      categoryKorean: "스터디/모임",
       content: `대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
       만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
       만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
@@ -102,13 +108,15 @@ const search = () => {
       만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.`,
       views: 0,
       likes: 0,
-      created_at: '2023-05-22 13:18',
+      created_at: "2023-05-22 13:18",
       reply_ids: [],
     },
     {
-      post_id: 'test2',
-      writer: '박소담',
-      category: '스터디/모임',
+      post_id: "test2",
+      nickname: "piou",
+      email: "test123456@test.com",
+      category: "study",
+      categoryKorean: "스터디/모임",
       content: `대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
       만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
       만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
@@ -117,13 +125,15 @@ const search = () => {
       만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.`,
       views: 0,
       likes: 0,
-      created_at: '2023-05-22 13:18',
+      created_at: "2023-05-22 13:18",
       reply_ids: [],
     },
     {
-      post_id: 'test2',
-      writer: '박소담',
-      category: '스터디/모임',
+      post_id: "test2",
+      nickname: "piou",
+      email: "test123456@test.com",
+      category: "study",
+      categoryKorean: "스터디/모임",
       content: `대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
       만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
       만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
@@ -132,13 +142,15 @@ const search = () => {
       만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.`,
       views: 0,
       likes: 0,
-      created_at: '2023-05-22 13:18',
+      created_at: "2023-05-22 13:18",
       reply_ids: [],
     },
     {
-      post_id: 'test2',
-      writer: '박소담',
-      category: '스터디/모임',
+      post_id: "test2",
+      nickname: "piou",
+      email: "test123456@test.com",
+      category: "study",
+      categoryKorean: "스터디/모임",
       content: `대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
       만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
       만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
@@ -147,13 +159,15 @@ const search = () => {
       만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.`,
       views: 0,
       likes: 0,
-      created_at: '2023-05-22 13:18',
+      created_at: "2023-05-22 13:18",
       reply_ids: [],
     },
     {
-      post_id: 'test2',
-      writer: '박소담',
-      category: '스터디/모임',
+      post_id: "test2",
+      nickname: "piou",
+      email: "test123456@test.com",
+      category: "study",
+      categoryKorean: "스터디/모임",
       content: `대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
       만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
       만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
@@ -162,13 +176,15 @@ const search = () => {
       만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.`,
       views: 10000,
       likes: 10000,
-      created_at: '2023-05-22 13:18',
+      created_at: "2023-05-22 13:18",
       reply_ids: [],
     },
     {
-      post_id: 'test2',
-      writer: '박소담',
-      category: '스터디/모임',
+      post_id: "test2",
+      nickname: "piou",
+      email: "test123456@test.com",
+      category: "study",
+      categoryKorean: "스터디/모임",
       content: `대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
       만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
       만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
@@ -177,7 +193,7 @@ const search = () => {
       만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.`,
       views: 0,
       likes: 0,
-      created_at: '2023-05-22 13:18',
+      created_at: "2023-05-22 13:18",
       reply_ids: [],
     },
   ];

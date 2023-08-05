@@ -18,7 +18,7 @@
               class="text-sm"
               >{{ post.categoryKorean }}</span
             >
-            <span class="text-xl font-medium">{{ post.writer }}</span>
+            <span class="text-xl font-medium">{{ post.nickname }}</span>
           </p>
           <span class="text-base pt-5">{{ date }}</span>
         </div>

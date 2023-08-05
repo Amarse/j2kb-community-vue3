@@ -17,7 +17,7 @@
             />
           </p>
           <p class="flex flex-column gap-2">
-            <span class="text-xl font-medium">{{ post.writer }}</span>
+            <span class="text-xl font-medium">{{ post.nickname }}</span>
             <span class="text-sm font-gray-800"
               >{{ created_at }} 조회수 {{ post.views }}</span
             >
@@ -75,7 +75,8 @@ const orderBy = ref<string>("desc");
 
 const post = ref<TPost>({
   post_id: "",
-  writer: "",
+  nickname: "",
+  email: "",
   content: "",
   views: 0,
   likes: 0,
@@ -88,7 +89,7 @@ const post = ref<TPost>({
 const reply = ref<TPostReply>({
   post_id: post.value.post_id,
   reply_id: "",
-  writer: "",
+  nickname: "",
   content: "",
   depth: 0,
   bundle_id: 0,
@@ -126,7 +127,8 @@ const loadPost = async (id: string) => {
           post_id: child.val().post_id,
           category: child.val().category,
           categoryKorean: child.val().categoryKorean,
-          writer: child.val().writer,
+          nickname: child.val().nickname,
+          email: child.val().email,
           content: child.val().content,
           views: child.val().views,
           likes: child.val().likes,
@@ -140,7 +142,7 @@ const loadPost = async (id: string) => {
       replyList.value.push({
         post_id: post.value.post_id,
         reply_id: id,
-        writer: "김하나",
+        nickname: "김하나",
         content:
           "안녕하시렵니까?\n안녕하시렵니까?\n안녕하시렵니까?\n안녕하시렵니까?",
         depth: index >= 1 ? 1 : 0,

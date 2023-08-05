@@ -10,7 +10,7 @@
       <div class="flex flex-column  gap-2">
         <p class="flex align-items-center justify-content-center">
           <span class="text-base font-medium font-gray-900 mr-2">{{
-            reply.writer
+            reply.nickname
           }}</span>
           <span class="text-sm font-gray-800">{{ reply.created_at }}</span>
         </p>

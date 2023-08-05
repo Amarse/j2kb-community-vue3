@@ -2,7 +2,8 @@ export type TPost = {
   post_id: string;
   category: string;
   categoryKorean: string;
-  writer: string;
+  nickname: string;
+  email: string;
   content: string;
   views: number;
   likes: number;
@@ -15,7 +16,7 @@ export type TPost = {
 export type TPostReply = {
   post_id: string;
   reply_id: string;
-  writer: string;
+  nickname: string;
   content: string;
   depth: number;
   bundle_id: number;

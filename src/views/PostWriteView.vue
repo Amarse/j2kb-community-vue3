@@ -15,14 +15,18 @@ import FirebaseDatabase from "@/services/FirebaseDatabase";
 import TemplatePostForm from "@/templates/TemplatePostForm.vue";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
+import { useAuthStore } from "@/stores/authStore.ts";
+import { computed } from "vue";
 
 dayjs.extend(utc);
 const database = ref<FirebaseDatabase | null>(null);
+const authStore = useAuthStore();
 
 // variables
 const post = ref<TPost>({
   post_id: "",
-  writer: "",
+  nickname: "",
+  email: "",
   content: "",
   views: 0,
   likes: 0,
@@ -36,10 +40,18 @@ onBeforeUnmount(() => {
   database.value = null;
 });
 
+const email = computed(() => {
+  return authStore.getUser.email !== null ? authStore.getUser.email : "";
+});
+
+const nickname = computed(() => {
+  return authStore.getUser.nickname !== null ? authStore.getUser.nickname : "";
+});
+
 // methods
 const init = () => {
   database.value = new FirebaseDatabase();
-}
+};
 
 const back = () => {
   router.back();
@@ -48,7 +60,7 @@ const back = () => {
 const setCategory = (category: any) => {
   post.value.category = category.code;
   post.value.categoryKorean = category.name;
-}
+};
 
 const write = async () => {
   if (database.value != null) {
@@ -60,7 +72,8 @@ const write = async () => {
         post_id: post_key,
         category: post.value.category,
         categoryKorean: post.value.categoryKorean,
-        writer: "박소담", // temp
+        nickname: nickname.value, // temp
+        email: email.value, // temp
         content: post.value.content,
         views: 0,
         likes: 0,

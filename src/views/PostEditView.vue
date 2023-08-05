@@ -20,7 +20,8 @@ const post_id: string | undefined = route.params.id?.toString();
 
 const post = ref<TPost>({
   post_id: "",
-  writer: "",
+  nickname: "",
+  email: "",
   content: "",
   views: 0,
   likes: 0,
@@ -49,7 +50,8 @@ const edit = async () => {
     post_id: post_id,
     category: post.value.category,
     categoryKorean: post.value.categoryKorean,
-    writer: post.value.writer, // temp
+    nickname: post.value.nickname,
+    email: post.value.email,
     content: post.value.content,
     views: post.value.views,
     likes: post.value.likes,
@@ -80,7 +82,8 @@ const loadPost = async (id: string) => {
           post_id: child.val().post_id,
           category: child.val().category,
           categoryKorean: child.val().categoryKorean,
-          writer: child.val().writer,
+          nickname: child.val().nickname,
+          email: child.val().email,
           content: child.val().content,
           views: child.val().views,
           likes: child.val().likes,

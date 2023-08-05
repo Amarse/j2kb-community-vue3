@@ -12,7 +12,7 @@
           <span :class="[post.category == '개발 질문' ? 'green' : 'orange']" class="text-sm">{{
             post.category
           }}</span>
-          <span class="text-xl font-medium">{{ post.writer }}</span>
+          <span class="text-xl font-medium">{{ post.nickname }}</span>
         </p>
         <span class="text-base pt-5">{{ post.created_at }}</span>
       </div>
