@@ -18,11 +18,6 @@ export const useAuthStore = defineStore("auth", () => {
     nickname: "",
   });
 
-  const savedUser = localStorage.getItem("user");
-  if (savedUser != null) {
-    user.value = JSON.parse(savedUser);
-  }
-
   const login = async (_email: string, _password: string) => {
     await userAuth
       .login(_email, _password)
@@ -31,7 +26,7 @@ export const useAuthStore = defineStore("auth", () => {
         user.value.email = res.user.email;
         user.value.accessToken = res.user.accessToken;
         user.value.nickname = res.user.displayName;
-        
+
         localStorage.setItem("user", JSON.stringify(user.value));
 
         router.push("main");
@@ -42,7 +37,26 @@ export const useAuthStore = defineStore("auth", () => {
       });
   };
 
-  const getUser = computed(() => user.value);
+  const logout = () => {
+    localStorage.removeItem("user");
+    router.push("/login");
+  };
 
-  return { login, getUser };
+  const getUser = computed(() => {
+    const temp = localStorage.getItem("user");
+    if (temp !== null) {
+      user.value = JSON.parse(temp);
+    } else {
+      user.value = {
+        uid: "",
+        accessToken: "",
+        email: "",
+        nickname: "",
+      };
+    }
+
+    return user.value;
+  });
+
+  return { login, logout, getUser };
 });

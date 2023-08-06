@@ -32,6 +32,9 @@ const routes = [
     name: "main",
     redirect: "/main/board",
     component: MainView,
+    meta: {
+      requiresAuth: true
+    },
     children: [
       {
         path: "board",
