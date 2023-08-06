@@ -61,7 +61,7 @@ const goToDetailView = (id: string) => {
 <style lang="scss" scoped>
 .board-card-wrapper {
   padding: rem($card-padding);
-  border-bottom: rem(1px) solid #aaa;
+  border-bottom: rem(1px) solid $gray500;
   .title {
     @include text-truncate(1, 1.5);
   }
