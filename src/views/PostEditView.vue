@@ -74,7 +74,7 @@ const edit = async () => {
 };
 
 const loadPost = async (id: string) => {
-  const snapshot = await database.value?.getSnapshotChild("posts", "post_id");
+  const snapshot = await database.value?.queryEqualTo("posts", "post_id");
   try {
     snapshot?.forEach((child) => {
       if (child.val().post_id === id) {

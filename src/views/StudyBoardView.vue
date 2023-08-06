@@ -21,7 +21,7 @@ const init = () => {
 };
 
 const load = async (category: string) => {
-  const snapshot = await database.value?.getSnapshotChild("posts", "category");
+  const snapshot = await database.value?.queryEqualTo("posts", "category");
   try {
     snapshot?.forEach((child) => {
       if (child.val().category === category) {

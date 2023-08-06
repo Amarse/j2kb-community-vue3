@@ -3,6 +3,7 @@ import {
   Database,
   ThenableReference,
   child,
+  equalTo,
   get,
   getDatabase,
   orderByChild,
@@ -42,12 +43,18 @@ export default class FirebaseDatabase {
     return remove(ref(rawObject, refs));
   }
 
-  public getSnapshotChild(
+  public queryEqualTo(
     refs: string,
     childKey: string
   ): Promise<DataSnapshot> {
     const rawObject = this.getRawObject();
-    const dataRef = query(ref(rawObject, refs), orderByChild(childKey)).ref;
+    const dataRef = query(ref(rawObject, refs), equalTo(childKey)).ref;
+    return get(dataRef);
+  }
+
+  public queryOrderBy(refs: string, orderBy: string): Promise<DataSnapshot> {
+    const rawObject = this.getRawObject();
+    const dataRef = query(ref(rawObject, refs), orderByChild(orderBy)).ref;
     return get(dataRef);
   }
 

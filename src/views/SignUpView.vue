@@ -165,7 +165,7 @@ const validateCheck = async (): Promise<TValidateResponse> => {
   inputValid.value.email = "";
 
   // 닉네임 중복체크
-  const snapshot = await database.value?.getSnapshotChild("users", "nickname");
+  const snapshot = await database.value?.queryEqualTo("users", "nickname");
   try {
     snapshot?.forEach((child) => {
       if (child.val().nickname === user.value.nickname) {

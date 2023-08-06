@@ -21,43 +21,30 @@ onBeforeUnmount(() => {
 // methods
 const init = () => {
   database.value = new FirebaseDatabase();
-  load(null);
+  load();
 };
 
-const load = async (category: string | null) => {
-  const snapshot = await database.value?.getSnapshotChild("posts", "category");
+const load = async () => {
+  const snapshot = await database.value?.queryOrderBy("posts", "created_at");
   try {
     snapshot?.forEach((child) => {
-      if (category === null) {
-        postList.value.push({
-          post_id: child.val().post_id,
-          category: child.val().category,
-          categoryKorean: child.val().categoryKorean,
-          email: child.val().email,
-          nickname: child.val().nickname,
-          content: child.val().content,
-          views: child.val().views,
-          likes: child.val().likes,
-          reply_ids:
-            child.val().reply_ids === undefined ? [] : child.val().reply_ids,
-          created_at: child.val().created_at,
-        });
-      } else if (child.val().category === category) {
-        postList.value.push({
-          post_id: child.val().post_id,
-          category: child.val().category,
-          categoryKorean: child.val().categoryKorean,
-          email: child.val().email,
-          nickname: child.val().nickname,
-          content: child.val().content,
-          views: child.val().views,
-          likes: child.val().likes,
-          reply_ids:
-            child.val().reply_ids === undefined ? [] : child.val().reply_ids,
-          created_at: child.val().created_at,
-        });
-      }
+      postList.value.push({
+        post_id: child.val().post_id,
+        category: child.val().category,
+        categoryKorean: child.val().categoryKorean,
+        email: child.val().email,
+        nickname: child.val().nickname,
+        content: child.val().content,
+        views: child.val().views,
+        likes: child.val().likes,
+        reply_ids:
+          child.val().reply_ids === undefined ? [] : child.val().reply_ids,
+        created_at: child.val().created_at,
+      });
     });
+
+    postList.value.reverse();
+
   } catch (error: any) {
     console.error(error);
   }

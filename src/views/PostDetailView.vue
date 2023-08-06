@@ -119,7 +119,7 @@ const back = () => {
 };
 
 const loadPost = async (id: string) => {
-  const snapshot = await database.value?.getSnapshotChild("posts", "post_id");
+  const snapshot = await database.value?.queryEqualTo("posts", "post_id");
   try {
     snapshot?.forEach((child) => {
       if (child.val().post_id === id) {
@@ -158,7 +158,7 @@ const loadPost = async (id: string) => {
     const updates: any = {};
     updates["/posts/" + id] = post.value;
     await database.value?.update(updates);
-    
+
   } catch (error: any) {
     console.error(error);
   }
