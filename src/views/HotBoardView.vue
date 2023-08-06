@@ -7,64 +7,61 @@
       </button>
     </p>
   </header>
-
-  <PostList
-    v-for="(post, index) in postList"
-    :post="post"
-    :key="index"
-    @view="moveToPostDetailView"
-  ></PostList>
+  <PostCard v-for="post in postList" :post="post"></PostCard>
 </template>
 <script lang="ts" setup>
-import { TPost } from '@/assets/models/TPost';
-import PostList from '@/components/post/PostList.vue';
-import router from '@/router';
+import { TPost } from "@/assets/models/TPost";
+import PostCard from "@/components/post/PostCard.vue";
+import router from "@/router";
+import FirebaseDatabase from "@/services/FirebaseDatabase";
+import { onBeforeUnmount, ref } from "vue";
+
+const HOT_POST_LIKES = 10;
 
 const back = () => {
   router.back();
 };
 
-// #test
-const postList: TPost[] = [
-  {
-    post_id: 'test1',
-    nickname: 'piou',
-    email: 'test123456@test.com',
-    category: 'study',
-    categoryKorean: "스터디/모임",
-    content: `대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
-      만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
-      만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
-      만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
-      만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
-      만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.`,
-    views: 0,
-    likes: 0,
-    created_at: '2023-05-22 13:18',
-    reply_ids: [],
-  },
-  {
-    post_id: 'test2',
-    nickname: 'piou',
-    email: 'test123456@test.com',
-    category: 'question',
-    categoryKorean: "개발 질문",
-    content: `대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
-      만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
-      만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
-      만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
-      만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
-      만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.`,
-    views: 0,
-    likes: 0,
-    created_at: '2023-05-22 13:18',
-    reply_ids: [],
-  },
-];
+const postList = ref<TPost[]>([]);
+const database = ref<FirebaseDatabase | null>(null);
 
-const moveToPostDetailView = (id: string) => {
-  router.push(`/detail/${id}`);
+onBeforeUnmount(() => {
+  database.value = null;
+});
+
+// methods
+const init = () => {
+  database.value = new FirebaseDatabase();
+  load();
 };
 
+const load = async () => {
+  const snapshot = await database.value?.queryOrderBy("posts", "created_at");
+  try {
+    snapshot?.forEach((child) => {
+      if (child.val().likes >= HOT_POST_LIKES) {
+        postList.value.push({
+          post_id: child.val().post_id,
+          category: child.val().category,
+          categoryKorean: child.val().categoryKorean,
+          email: child.val().email,
+          nickname: child.val().nickname,
+          content: child.val().content,
+          views: child.val().views,
+          likes: child.val().likes,
+          reply_ids:
+            child.val().reply_ids === undefined ? [] : child.val().reply_ids,
+          created_at: child.val().created_at,
+        });
+      }
+    });
+
+    postList.value.reverse();
+  } catch (error: any) {
+    console.error(error);
+  }
+};
+
+init();
 </script>
 <style lang="scss" scoped></style>
