@@ -6,7 +6,7 @@ export type TPost = {
   email: string;
   content: string;
   views: number;
-  likes: number;
+  likes: string[];
   reply_ids: string[]; // reply id list
   created_at: string;
   updated_at?: string;

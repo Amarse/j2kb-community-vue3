@@ -66,6 +66,7 @@ const back = () => {
 };
 
 const search = async () => {
+  postList.value = [];
   if (searchKeyword.value.length < 2) {
     resultMessage.value = "2글자 이상 입력해주세요.";
     return;
@@ -82,7 +83,7 @@ const search = async () => {
           nickname: child.val().nickname,
           content: child.val().content,
           views: child.val().views,
-          likes: child.val().likes,
+          likes: child.val().likes === undefined ? [] : child.val().likes,
           reply_ids:
             child.val().reply_ids === undefined ? [] : child.val().reply_ids,
           created_at: child.val().created_at,

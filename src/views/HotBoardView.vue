@@ -39,7 +39,7 @@ const load = async () => {
   const snapshot = await database.value?.queryOrderBy("posts", "created_at");
   try {
     snapshot?.forEach((child) => {
-      if (child.val().likes >= HOT_POST_LIKES) {
+      if (child.val().likes !== undefined && child.val().likes.length >= HOT_POST_LIKES) {
         postList.value.push({
           post_id: child.val().post_id,
           category: child.val().category,

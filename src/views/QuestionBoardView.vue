@@ -33,7 +33,7 @@ const load = async (category: string) => {
           email: child.val().email,
           content: child.val().content,
           views: child.val().views,
-          likes: child.val().likes,
+          likes: child.val().likes === undefined ? [] : child.val().likes,
           reply_ids: child.val().reply_ids === undefined ? [] :  child.val().reply_ids,
           created_at: child.val().created_at,
         });

@@ -26,7 +26,7 @@
         </span>
         <span class="text-base">
           <i class="pi pi-heart"></i>
-          {{ post.likes }}
+          {{ likes }}
         </span>
       </p>
     </div>
@@ -35,6 +35,7 @@
 </template>
 <script lang="ts" setup>
 import { TPost } from '@/assets/models/TPost';
+import { computed } from 'vue';
 
 const props = defineProps<{
   post: TPost;
@@ -44,6 +45,9 @@ const emit = defineEmits<{
   (e: 'view', id: string): void;
 }>();
 
+const likes = computed(() => {
+  return props.post.likes.length;
+})
 // methods
 const view = () => {
   emit('view', props.post.post_id);

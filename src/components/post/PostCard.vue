@@ -31,7 +31,7 @@
           </span>
           <span class="text-base">
             <i class="pi pi-heart"></i>
-            {{ post.likes }}
+            {{ likes }}
           </span>
         </p>
       </div>
@@ -43,6 +43,7 @@ import { TPost } from '@/assets/models/TPost';
 import router from '@/router';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { computed } from 'vue';
 
 dayjs.extend(relativeTime);
 
@@ -53,6 +54,9 @@ const props = defineProps<{
 // variables
 const date = dayjs(props.post.created_at).fromNow();
 
+const likes = computed(() => {
+  return props.post.likes.length;
+})
 // methods
 const goToDetailView = (id: string) => {
   router.push(`/detail/${id}`);

@@ -29,7 +29,7 @@ const post = ref<TPost>({
   email: "",
   content: "",
   views: 0,
-  likes: 0,
+  likes: [],
   reply_ids: [],
   created_at: "",
   category: "",
@@ -72,11 +72,11 @@ const write = async () => {
         post_id: post_key,
         category: post.value.category,
         categoryKorean: post.value.categoryKorean,
-        nickname: nickname.value, // temp
-        email: email.value, // temp
+        nickname: nickname.value,
+        email: email.value,
         content: post.value.content,
         views: 0,
-        likes: 0,
+        likes: [],
         reply_ids: [],
         created_at: dayjs().format().toString(),
       };

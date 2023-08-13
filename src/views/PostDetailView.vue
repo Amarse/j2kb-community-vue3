@@ -29,13 +29,9 @@
         </article>
         <article>
           <p class="flex gap-5 align-items-center font-gray-900">
-            <span class="text-base">
-              <i class="pi pi-comment"></i>
-              {{ post.reply_ids.length }}
-            </span>
-            <span class="text-base">
+            <span class="text-base" @click="postLike">
               <i class="pi pi-heart"></i>
-              {{ post.likes }}
+              {{ likes }}
             </span>
           </p>
         </article>
@@ -79,9 +75,11 @@ import PostOptions from "@/components/post/PostOptions.vue";
 import PostReply from "@/components/post/PostReply.vue";
 import Divider from "primevue/divider";
 import InputText from "primevue/inputtext";
+import { useAuthStore } from "@/stores/authStore.ts";
 
 dayjs.extend(utc);
 
+const authStore = useAuthStore();
 const route = useRoute();
 const post_id: string | undefined = route.params.id.toString();
 const database = ref<FirebaseDatabase | null>(null);
@@ -94,7 +92,7 @@ const post = ref<TPost>({
   email: "",
   content: "",
   views: 0,
-  likes: 0,
+  likes: [],
   created_at: "",
   category: "",
   categoryKorean: "",
@@ -112,6 +110,8 @@ const reply = ref<TPostReply>({
   created_at: "",
 });
 
+const isUpdating = ref<boolean>(false);
+
 const created_at = computed(() => {
   if(post.value?.created_at === "") {
     return "";
@@ -122,6 +122,10 @@ const created_at = computed(() => {
 onBeforeUnmount(() => {
   database.value = null;
 });
+
+const likes = computed(() => {
+  return post.value.likes.length;
+})
 
 // methods
 const init = () => {
@@ -146,14 +150,12 @@ const loadPost = async (id: string) => {
           email: child.val().email,
           content: child.val().content,
           views: child.val().views + 1,
-          likes: child.val().likes,
+          likes: child.val().likes === undefined ? [] :  child.val().likes,
           reply_ids: child.val().reply_ids === undefined ? [] :  child.val().reply_ids,
           created_at: dayjs(child.val().created_at).format().toString(),
         };
       }
     });
-
-    
 
     post.value.reply_ids.forEach((id, index) => {
       replyList.value.push({
@@ -201,6 +203,45 @@ const selectedPostOption = async (option: string) => {
 const commentOrderBy = (_orderBy: string) => {
   orderBy.value = _orderBy;
 };
+
+const postLike = async () => {
+  if(isUpdating.value) return;
+  
+  isUpdating.value = true;
+  if(post.value.likes.includes(authStore.getUser.uid)) {
+    const index = post.value.likes.findIndex(el => el === authStore.getUser.uid);
+    post.value.likes.splice(index, 1);
+  }
+  else {
+    post.value.likes.push(authStore.getUser.uid);
+  }
+
+  const data: TPost = {
+    post_id: post_id,
+    category: post.value.category,
+    categoryKorean: post.value.categoryKorean,
+    nickname: post.value.nickname,
+    email: post.value.email,
+    content: post.value.content,
+    views: post.value.views,
+    likes: post.value.likes,
+    reply_ids: post.value.reply_ids,
+    created_at: post.value.created_at,
+    updated_at: dayjs().format().toString(),
+  };
+
+  const updates: any = {};
+  updates["/posts/" + post_id] = data;
+  try {
+    await database.value?.update(updates).then(() => {
+      isUpdating.value = false;
+    });
+  }
+  catch(error: any) {
+    console.error(error);
+    isUpdating.value = false;
+  }
+}
 
 init();
 </script>
