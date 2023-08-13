@@ -44,17 +44,17 @@
   </TemplateLoginForm>
 </template>
 <script lang="ts" setup>
+import { ref, onBeforeUnmount } from "vue";
 import { TUser } from "@/assets/models/TUser";
-import { ref, onBeforeUnmount, onBeforeMount } from "vue";
+import { Base64 } from "js-base64";
+import { TValidateResponse } from "@/assets/models/TValidate";
+import router from "@/router";
+import FirebaseUserAuth from "@/services/FirebaseUserAuth";
+import validate from "@/utils/validate";
+import FirebaseDatabase from "@/services/FirebaseDatabase";
 import TemplateLoginForm from "@/templates/TemplateLoginForm.vue";
 import InputText from "primevue/inputtext";
 import Button from "primevue/button";
-import router from "@/router";
-import UserAuth from "@/services/UserAuth";
-import FirebaseDatabase from "@/services/FirebaseDatabase";
-import { Base64 } from "js-base64";
-import validate from "@/utils/validate";
-import { TValidateResponse } from "@/assets/models/TValidate";
 
 // variables
 const user = ref<TUser>({
@@ -69,14 +69,8 @@ const inputValid = ref({
   nickname: "",
 });
 
-const auth = ref<UserAuth | null>(null);
+const auth = ref<FirebaseUserAuth | null>(null);
 const database = ref<FirebaseDatabase | null>(null);
-
-// lifecycle
-onBeforeMount(() => {
-  auth.value = new UserAuth();
-  database.value = new FirebaseDatabase();
-});
 
 onBeforeUnmount(() => {
   auth.value = null;
@@ -84,6 +78,11 @@ onBeforeUnmount(() => {
 });
 
 // methods
+const init = () => {
+  auth.value = new FirebaseUserAuth();
+  database.value = new FirebaseDatabase();
+};
+
 const signup = async () => {
   // 1. 입력 여부 체크
   const inputResult = inputCheck();
@@ -103,8 +102,11 @@ const signup = async () => {
     try {
       const result = await auth.value.signUp(
         user.value.email,
-        user.value.password
+        Base64.encode(user.value.password)
       );
+
+      await auth.value.updateDisplayName(user.value.nickname);
+
       // 데이터베이스에 유저 정보 저장
       const refs = `users/${result.user.uid}`;
       const data: TUser = {
@@ -193,5 +195,8 @@ const validateCheck = async (): Promise<TValidateResponse> => {
 const cancel = () => {
   router.push("/login");
 };
+
+init();
 </script>
 <style lang="scss" scoped></style>
+@/services/FirebaseUserAuth

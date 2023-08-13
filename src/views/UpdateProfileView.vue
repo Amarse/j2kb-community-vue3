@@ -20,7 +20,7 @@
           <span class="text-2xl font-medium">박소담</span>
           <i class="pi pi-pencil text-base" />
         </div>
-        <span class="text-sm font-gray-600 mr-2">로그아웃</span>
+        <span class="text-sm font-gray-600 mr-2" @click="logout">로그아웃</span>
       </div>
     </article>
     <article class="mb-2">
@@ -43,16 +43,25 @@
       :key="index"
       @view="moveToPostDetailView"
     />
-    <span class="withdrawal font-gray-600">회원탈퇴</span>
+    <span class="withdrawal font-gray-600" @click="withdrawal">회원탈퇴</span>
   </section>
 </template>
 <script lang="ts" setup>
 import { MyContent } from "@/assets/models/TPost";
 import router from "@/router";
 import MyContentsCard from "@/components/my-contents/MyContentsCard.vue";
+import FirebaseUserAuth from "@/services/FirebaseUserAuth";
+import { onBeforeMount, onBeforeUnmount, ref } from "vue";
+import FirebaseDatabase from "@/services/FirebaseDatabase";
+import { useAuthStore } from "@/stores/authStore.ts";
 
 // 로그인 한 유저의 post_ids, reply_ids 검색을 해서
 // 컨텐츠 리스트를 만든다.
+const auth = ref<FirebaseUserAuth | null>(null);
+const database = ref<FirebaseDatabase | null>(null);
+
+const authStore = useAuthStore();
+
 const contentList: MyContent[] = [
   {
     post_id: "test2",
@@ -80,8 +89,40 @@ const contentList: MyContent[] = [
   },
 ];
 
+// lifecycle
+onBeforeMount(() => {
+  auth.value = new FirebaseUserAuth();
+  database.value = new FirebaseDatabase();
+});
+
+onBeforeUnmount(() => {
+  auth.value = null;
+  database.value = null;
+});
+
+// methods
 const moveToPostDetailView = (id: string) => {
   router.push(`/detail/${id}`);
+};
+
+const logout = () => {
+  localStorage.removeItem("user");
+  router.push("/login");
+};
+
+const withdrawal = async () => {
+  if (auth.value != null) {
+    try {
+      const uid = authStore.getUser.uid;
+      await auth.value.withdrawal().then(async () => {
+        await database.value?.remove(`users/${uid}`);
+        alert("회원 탈퇴가 완료되었습니다.");
+        router.push("/login");
+      });
+    } catch (error) {
+      alert("회원 탈퇴 실패하였습니다.");
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>

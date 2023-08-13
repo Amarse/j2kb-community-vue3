@@ -1,41 +1,66 @@
 <template>
-  <PostCard v-for="post,index in postList" :post="post" :key="index"></PostCard>
+  <PostCard
+    v-for="(post, index) in postList"
+    :post="post"
+    :key="index"
+  ></PostCard>
 </template>
 <script lang="ts" setup>
+import { onBeforeUnmount, ref } from "vue";
 import { TPost } from "@/assets/models/TPost";
+import FirebaseDatabase from "@/services/FirebaseDatabase";
 import PostCard from "@/components/post/PostCard.vue";
-// #test
-const postList: TPost[] = [
-  {
-    post_id: "test1",
-    category : "스터디/모임",
-    writer: "박소담",
-    content: `대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
-      만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
-      만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
-      만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
-      만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
-      만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.`,
-    views: 0,
-    likes: 0,
-    created_at: "2023-05-22 13:18",
-    reply_ids: [],
-  },
-  {
-    post_id: "test2",
-    writer: "박소담",
-    category : "개발 질문",
-    content: `대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
-      만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
-      만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
-      만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
-      만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.대나무 숲을
-      만들어보자.대나무 숲을 만들어보자.대나무 숲을 만들어보자.`,
-    views: 0,
-    likes: 0,
-    created_at: "2023-05-22 13:18",
-    reply_ids: [],
-  },
-];
+
+const postList = ref<TPost[]>([]);
+const database = ref<FirebaseDatabase | null>(null);
+
+onBeforeUnmount(() => {
+  database.value = null;
+});
+
+// methods
+const init = () => {
+  database.value = new FirebaseDatabase();
+  load(null);
+};
+
+const load = async (category: string | null) => {
+  const snapshot = await database.value?.getSnapshotChild("posts", "category");
+  try {
+    snapshot?.forEach((child) => {
+      if (category === null) {
+        postList.value.push({
+          post_id: child.val().post_id,
+          category: child.val().category,
+          categoryKorean: child.val().categoryKorean,
+          writer: child.val().writer,
+          content: child.val().content,
+          views: child.val().views,
+          likes: child.val().likes,
+          reply_ids:
+            child.val().reply_ids === undefined ? [] : child.val().reply_ids,
+          created_at: child.val().created_at,
+        });
+      } else if (child.val().category === category) {
+        postList.value.push({
+          post_id: child.val().post_id,
+          category: child.val().category,
+          categoryKorean: child.val().categoryKorean,
+          writer: child.val().writer,
+          content: child.val().content,
+          views: child.val().views,
+          likes: child.val().likes,
+          reply_ids:
+            child.val().reply_ids === undefined ? [] : child.val().reply_ids,
+          created_at: child.val().created_at,
+        });
+      }
+    });
+  } catch (error: any) {
+    console.error(error);
+  }
+};
+
+init();
 </script>
 <style lang="scss" scoped></style>

@@ -4,13 +4,25 @@
       <button aria-label="close" @click="back">
         <i class="pi pi-times" />
       </button>
-
-      <p class="text-3xl font-black">글쓰기</p>
-      <button aria-label="write" @click="write">
+      <p v-if="mode === 'write'" class="text-3xl font-black">글쓰기</p>
+      <p v-else class="text-3xl font-black">수정하기</p>
+      <button v-if="mode === 'write'" aria-label="write" @click="write">
         <i class="pi pi-send" />
+      </button>
+      <button v-else aria-label="write" @click="edit">
+        <i class="pi pi-pencil" />
       </button>
     </header>
     <main ref="main">
+      <Dropdown
+        :modelValue="selectedCateogry"
+        @update:modelValue="selectCategory"
+        :options="categories"
+        optionLabel="name"
+        placeholder="카테고리를 선택해주세요."
+        class="w-full border-none border-noround"
+      />
+
       <Editor v-model="post.content" :editorStyle="`height: ${editorHeight}px`">
         <template v-slot:toolbar>
           <span class="ql-formats">
@@ -50,86 +62,66 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { ref, onMounted, onBeforeMount, onBeforeUnmount } from "vue";
 import { TPost } from "@/assets/models/TPost";
 import Editor from "primevue/editor";
-import router from "@/router";
-import FirebaseDatabase from "@/services/FirebaseDatabase";
+import Dropdown from "primevue/dropdown";
+import { ref, onMounted, watch } from "vue";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 
 dayjs.extend(utc);
 
-// variables
-const post = ref<TPost>({
-  post_id: "",
-  writer: "",
-  content: "",
-  views: 0,
-  likes: 0,
-  reply_ids: [],
-  created_at: "",
-  category: "",
-});
+const props = defineProps<{
+  mode: string;
+  post: TPost;
+}>();
+
+const emit = defineEmits<{
+  (e: "back"): void;
+  (e: "write"): void;
+  (e: "edit"): void;
+}>();
 
 const main = ref<any | null>(null);
 const editorHeight = ref<number>(0);
-const database = ref<FirebaseDatabase | null>(null);
+const categories = ref([
+  { name: "스터디/모임", code: "study" },
+  { name: "개발 질문", code: "question" },
+]);
 
-// lifecycle
-onBeforeMount(() => {
-  database.value = new FirebaseDatabase();
-});
+const selectedCateogry = ref<any>({});
 
 onMounted(() => {
   // 41 means editor toolbar height
   editorHeight.value = main.value.clientHeight - 41;
 });
 
-onBeforeUnmount(() => {
-  database.value = null;
-});
+const selectCategory = (value: { name: string, code: string }) => {
+  props.post.categoryKorean = value.name;
+  props.post.category = value.code;
+}
 
-// methods
+watch(
+  () => props.post,
+  (value) => {
+    selectedCateogry.value = { name: value.categoryKorean, code: value.category }
+  },
+  { deep: true }
+);
+
 const back = () => {
-  router.back();
+  emit("back");
 };
 
-const write = async () => {
-  if (database.value != null) {
-    const refs = `posts`;
-    const post_key = database.value.push(refs).key;
+const write = () => {
+  emit("write");
+};
 
-    if (post_key != null) {
-      const data: TPost = {
-        post_id: post_key,
-        category: "question", // temp
-        writer: "박소담", // temp
-        content: post.value.content,
-        views: 0,
-        likes: 0,
-        reply_ids: [],
-        created_at: dayjs().format().toString(),
-      };
-
-      const updates: any = {};
-      updates["/posts/" + post_key] = data;
-
-      await database.value.update(updates);
-
-      router.push("/main");
-    }
-  }
+const edit = () => {
+  emit("edit");
 };
 </script>
 <style lang="scss" scoped>
-.post-view-wrapper {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  row-gap: 0.5rem;
-  background: $gray100;
-}
 main {
   height: calc(100% - rem($header-height));
 

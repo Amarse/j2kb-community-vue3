@@ -6,7 +6,8 @@ import AllBoardView from "@/views/AllBoardView.vue";
 import HotBoardView from "@/views/HotBoardView.vue";
 import StudyBoardView from "@/views/StudyBoardView.vue";
 import QuestionBoardView from "@/views/QuestionBoardView.vue";
-import PostView from "@/views/PostView.vue";
+import PostWriteView from "@/views/PostWriteView.vue";
+import PostEditView from "@/views/PostEditView.vue";
 import PostDetailView from "@/views/PostDetailView.vue";
 import SearchView from "@/views/SearchView.vue";
 import UpdateProfileView from "@/views/UpdateProfileView.vue";
@@ -31,6 +32,9 @@ const routes = [
     name: "main",
     redirect: "/main/board",
     component: MainView,
+    meta: {
+      requiresAuth: true
+    },
     children: [
       {
         path: "board",
@@ -73,9 +77,14 @@ const routes = [
     ],
   },
   {
-    path: "/post",
-    name: "post",
-    component: PostView,
+    path: "/post/write",
+    name: "post-write",
+    component: PostWriteView,
+  },
+  {
+    path: "/post/edit/:id",
+    name: "post-edit",
+    component: PostEditView,
   },
   {
     path: "/detail/:id",
