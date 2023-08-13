@@ -36,46 +36,64 @@
           </p>
         </article>
       </section>
-    
+
       <!-- comment area -->
       <section class="reply-section">
-        <p class="flex justify-content-between  align-items-center p-5 bg-white comment-list-header">
-            <span class="text-xl">전체 댓글</span>
-          <div class="flex align-items-center">
-            <button @click="commentOrderBy('desc')" :class="orderBy === 'desc' ? 'selected' : ''" class="text-base">최신순</button>
-            <Divider layout="vertical" class="custom-divider"/>
-            <button @click="commentOrderBy('asc')" :class="orderBy === 'asc' ? 'selected' : ''" class="text-base">등록순</button>
-          </div>
-        </p>
+        <div
+          class="flex justify-content-between align-items-center p-5 bg-white comment-list-header"
+        >
+          <span class="text-xl">전체 댓글</span>
+          <p class="flex align-items-center">
+            <button
+              @click="commentOrderBy('desc')"
+              :class="orderBy === 'desc' ? 'selected' : ''"
+              class="text-base"
+            >
+              최신순
+            </button>
+            <Divider layout="vertical" class="custom-divider" />
+            <button
+              @click="commentOrderBy('asc')"
+              :class="orderBy === 'asc' ? 'selected' : ''"
+              class="text-base"
+            >
+              등록순
+            </button>
+          </p>
+        </div>
         <div class="reply-scroll-wrapper">
           <PostReply
-          v-for="(reply, index) in replyList"
-          :reply="reply"
-          :key="index"
-        />
+            v-for="(reply, index) in replyList"
+            :reply="reply"
+            :key="index"
+          />
         </div>
 
         <div class="reply-input-box">
-          <InputText v-model="reply.content" placeholder="댓글을 입력해주세요." class="w-11 border-noround"/>
-          <button class="reply-button">등록</button>
+          <InputText
+            v-model="reply.content"
+            placeholder="댓글을 입력해주세요."
+            class="w-11 border-noround"
+          />
+          <button class="reply-button" @click="commitReply">등록</button>
         </div>
       </section>
     </main>
   </div>
 </template>
 <script lang="ts" setup>
-import { TPost, TPostReply } from "@/assets/models/TPost";
-import { computed, onBeforeUnmount, ref } from "vue";
-import { useRoute } from "vue-router";
-import router from "@/router";
-import FirebaseDatabase from "@/services/FirebaseDatabase";
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
-import PostOptions from "@/components/post/PostOptions.vue";
-import PostReply from "@/components/post/PostReply.vue";
-import Divider from "primevue/divider";
-import InputText from "primevue/inputtext";
-import { useAuthStore } from "@/stores/authStore.ts";
+import { TPost, TPostReply } from '@/assets/models/TPost';
+import { computed, onBeforeUnmount, ref } from 'vue';
+import { useRoute } from 'vue-router';
+import router from '@/router';
+import FirebaseDatabase from '@/services/FirebaseDatabase';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import PostOptions from '@/components/post/PostOptions.vue';
+import PostReply from '@/components/post/PostReply.vue';
+import Divider from 'primevue/divider';
+import InputText from 'primevue/inputtext';
+import { useAuthStore } from '@/stores/authStore.ts';
 
 dayjs.extend(utc);
 
@@ -84,39 +102,44 @@ const route = useRoute();
 const post_id: string | undefined = route.params.id.toString();
 const database = ref<FirebaseDatabase | null>(null);
 const replyList = ref<TPostReply[]>([]);
-const orderBy = ref<string>("desc");
+const orderBy = ref<string>('desc');
 
 const post = ref<TPost>({
-  post_id: "",
-  nickname: "",
-  email: "",
-  content: "",
+  post_id: '',
+  nickname: '',
+  email: '',
+  content: '',
   views: 0,
   likes: [],
-  created_at: "",
-  category: "",
-  categoryKorean: "",
+  created_at: '',
+  category: '',
+  categoryKorean: '',
   reply_ids: [],
 });
 
 const reply = ref<TPostReply>({
   post_id: post.value.post_id,
-  reply_id: "",
-  nickname: "",
-  content: "",
+  reply_id: '',
+  nickname: '',
+  content: '',
   depth: 0,
   bundle_id: 0,
   bundle_order: 0,
-  created_at: "",
+  created_at: '',
 });
 
 const isUpdating = ref<boolean>(false);
+// const reply_id: string | undefined = route.params.id?.toString();
 
 const created_at = computed(() => {
-  if(post.value?.created_at === "") {
-    return "";
+  if (post.value?.created_at === '') {
+    return '';
   }
-  return dayjs(post.value?.created_at).format("YYYY-MM-DD hh:mm:ss");
+  return dayjs(post.value?.created_at).format('YYYY-MM-DD hh:mm:ss');
+});
+
+const nickname = computed(() => {
+  return authStore.getUser.nickname !== null ? authStore.getUser.nickname : '';
 });
 
 onBeforeUnmount(() => {
@@ -125,7 +148,7 @@ onBeforeUnmount(() => {
 
 const likes = computed(() => {
   return post.value.likes.length;
-})
+});
 
 // methods
 const init = () => {
@@ -138,7 +161,7 @@ const back = () => {
 };
 
 const loadPost = async (id: string) => {
-  const snapshot = await database.value?.queryEqualTo("posts", "post_id");
+  const snapshot = await database.value?.queryEqualTo('posts', 'post_id');
   try {
     snapshot?.forEach((child) => {
       if (child.val().post_id === id) {
@@ -150,52 +173,55 @@ const loadPost = async (id: string) => {
           email: child.val().email,
           content: child.val().content,
           views: child.val().views + 1,
-          likes: child.val().likes === undefined ? [] :  child.val().likes,
-          reply_ids: child.val().reply_ids === undefined ? [] :  child.val().reply_ids,
+          likes: child.val().likes === undefined ? [] : child.val().likes,
+          reply_ids:
+            child.val().reply_ids === undefined ? [] : child.val().reply_ids,
           created_at: dayjs(child.val().created_at).format().toString(),
         };
       }
     });
 
-    post.value.reply_ids.forEach((id, index) => {
-      replyList.value.push({
-        post_id: post.value.post_id,
-        reply_id: id,
-        nickname: "김하나",
-        content:
-          "안녕하시렵니까?\n안녕하시렵니까?\n안녕하시렵니까?\n안녕하시렵니까?",
-        depth: index >= 1 ? 1 : 0,
-        bundle_id: 100,
-        bundle_order: index >= 1 ? 1 : 0,
-        created_at: "2023-05-22 13:18",
-      });
-    });
-    
+    // reply id 로 리스트 불러오기
+
+    // post.value.reply_ids.forEach((id, index) => {
+    //   replyList.value.push({
+    //     post_id: post.value.post_id,
+    //     reply_id: id,
+    //     nickname: '김하나',
+    //     content:
+    //       '안녕하시렵니까?\n안녕하시렵니까?\n안녕하시렵니까?\n안녕하시렵니까?',
+    //     depth: index >= 1 ? 1 : 0,
+    //     bundle_id: 100,
+    //     bundle_order: index >= 1 ? 1 : 0,
+    //     created_at: '2023-05-22 13:18',
+    //   });
+    // });
+
     // 조회수 증가
     const updates: any = {};
-    updates["/posts/" + id] = post.value;
+    updates['/posts/' + id] = post.value;
     await database.value?.update(updates);
-
   } catch (error: any) {
     console.error(error);
   }
 };
 
 const selectedPostOption = async (option: string) => {
-  if (option === "modify") {
+  if (option === 'modify') {
     // 수정
     router.push(`/post/edit/${post_id}`);
   } else {
     // 삭제
-    if(confirm("게시글을 정말 삭제하시겠습니까?")) {
+    if (confirm('게시글을 정말 삭제하시겠습니까?')) {
       const refs = `posts/${post_id}`;
-      await database.value?.remove(refs)
-      .then(() => {
-        router.back();
-      })
-      .catch(error => {
-        console.log(error);
-      });
+      await database.value
+        ?.remove(refs)
+        .then(() => {
+          router.back();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
   }
 };
@@ -205,14 +231,15 @@ const commentOrderBy = (_orderBy: string) => {
 };
 
 const postLike = async () => {
-  if(isUpdating.value) return;
-  
+  if (isUpdating.value) return;
+
   isUpdating.value = true;
-  if(post.value.likes.includes(authStore.getUser.uid)) {
-    const index = post.value.likes.findIndex(el => el === authStore.getUser.uid);
+  if (post.value.likes.includes(authStore.getUser.uid)) {
+    const index = post.value.likes.findIndex(
+      (el) => el === authStore.getUser.uid
+    );
     post.value.likes.splice(index, 1);
-  }
-  else {
+  } else {
     post.value.likes.push(authStore.getUser.uid);
   }
 
@@ -231,22 +258,46 @@ const postLike = async () => {
   };
 
   const updates: any = {};
-  updates["/posts/" + post_id] = data;
+  updates['/posts/' + post_id] = data;
   try {
     await database.value?.update(updates).then(() => {
       isUpdating.value = false;
     });
-  }
-  catch(error: any) {
+  } catch (error: any) {
     console.error(error);
     isUpdating.value = false;
   }
-}
+};
+const commitReply = async () => {
+  // reply 테이블을 만들어서 다 관리를 한다.
+
+  if (database.value != null) {
+    const refs = `replys`;
+    const reply_key = database.value.push(refs).key;
+
+    if (reply_key != null) {
+      const data: TPostReply = {
+        post_id: post.value.post_id,
+        reply_id: reply_key,
+        nickname: nickname.value,
+        content: reply.value.content,
+        depth: reply.value.depth,
+        bundle_id: reply.value.bundle_id,
+        bundle_order: reply.value.bundle_order,
+        created_at: dayjs().format().toString(),
+      };
+      const updates: any = {};
+      updates['/replys/' + reply_key] = data;
+
+      await database.value.update(updates);
+    }
+    //post 에는 reply 아이디를 날리고
+  }
+};
 
 init();
 </script>
 <style lang="scss" scoped>
-
 $reply-input-height: 45px;
 .post-detail {
   background: #f9f7f3;
@@ -280,7 +331,9 @@ $reply-input-height: 45px;
     }
 
     .reply-section {
-      height: calc(100% - (rem(300px + $reply-input-height) + 0.5rem)); //comment-list-header margin-top
+      height: calc(
+        100% - (rem(300px + $reply-input-height) + 0.5rem)
+      ); //comment-list-header margin-top
 
       .reply-scroll-wrapper {
         height: calc(100% - rem(86.5px));
@@ -316,6 +369,4 @@ button {
 .selected {
   color: $pink;
 }
-
-
 </style>
