@@ -8,24 +8,39 @@
     </header>
     <main class="main flex flex-column">
       <!-- post area -->
-      <section class="relative bg-white wrapper">
-        <div class="flex align-items-center mb-4">
-          <p class="pr-2 mr-3">
-            <img
-              class="profile-image border-circle"
-              src="https://plus.unsplash.com/premium_photo-1666264200739-caa822df28d3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw0fHx8ZW58MHx8fHx8&auto=format&fit=crop&w=800&q=60"
-            />
+      <section class="relative bg-white wrapper detail-flex">
+        <article>
+          <div class="flex align-items-center mb-4">
+            <p class="pr-2 mr-3">
+              <img
+                class="profile-image border-circle"
+                src="https://plus.unsplash.com/premium_photo-1666264200739-caa822df28d3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw0fHx8ZW58MHx8fHx8&auto=format&fit=crop&w=800&q=60"
+              />
+            </p>
+            <p class="flex flex-column gap-2">
+              <span class="text-xl font-medium">{{ post.nickname }}</span>
+              <span class="text-sm font-gray-800"
+                >{{ created_at }} 조회수 {{ post.views }}</span
+              >
+            </p>
+          </div>
+          <p class="line-height-3 content-space" v-html="post.content" />
+          <PostOptions @option="selectedPostOption" class="option" />
+        </article>
+        <article>
+          <p class="flex gap-5 align-items-center font-gray-900">
+            <span class="text-base">
+              <i class="pi pi-comment"></i>
+              {{ post.reply_ids.length }}
+            </span>
+            <span class="text-base">
+              <i class="pi pi-heart"></i>
+              {{ post.likes }}
+            </span>
           </p>
-          <p class="flex flex-column gap-2">
-            <span class="text-xl font-medium">{{ post.nickname }}</span>
-            <span class="text-sm font-gray-800"
-              >{{ created_at }} 조회수 {{ post.views }}</span
-            >
-          </p>
-        </div>
-        <p class="line-height-3 content-space" v-html="post.content" />
-        <PostOptions @option="selectedPostOption" class="option" />
+        </article>
       </section>
+    
       <!-- comment area -->
       <section class="reply-section">
         <p class="flex justify-content-between  align-items-center p-5 bg-white comment-list-header">
@@ -203,6 +218,9 @@ $reply-input-height: 45px;
       height: rem(300px);
       padding: rem(30px) rem($card-padding);
       border: none;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
 
       .option {
         position: absolute;
@@ -257,4 +275,6 @@ button {
 .selected {
   color: $pink;
 }
+
+
 </style>
